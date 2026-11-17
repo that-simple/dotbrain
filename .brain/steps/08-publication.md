@@ -1,12 +1,12 @@
 ---
-status: in-progress
+status: done
 assignee: [user:dkowcun]
 description: "dotbrain 1.0 is public: the `that-simple/dotbrain` repository on GitHub with a squashed history and the tag `spec-v1.0.0`, and the package `@that-simple/dotbrain@1.0.0` on npm, with managed blocks linking to the published specification."
 ---
 # Step 8: publication
 
 <!-- BEGIN:dotbrain status -->
-Status: `in-progress` · Assignee: user:dkowcun
+Status: `done` · Assignee: user:dkowcun
 <!-- END:dotbrain status -->
 
 The last step before 1.0 ([roadmap.md](../roadmap.md)). It publishes what [step 4](04-npm-package.md) made ready and [step 6](06-lint-hook.md) completed; step 4 left the publication, the repository, the placeholder of the repository URL and the tag `spec-v1.0.0` to this step.
@@ -61,6 +61,8 @@ Anyone can take dotbrain 1.0 without cloning anything private: the repository `t
 
 - 2026-11-17: Work started.
 - 2026-11-17: Stage 1, ready for publication. The link to the specification is `https://github.com/that-simple/dotbrain/blob/spec-v<version>/spec/README.md` in `tools/src/views.ts`, `templates/managed-block.md`, the starter procedure, `spec/README.md` and the tests; the conformance cases are built again. The documents describing the channels follow the [decision without a repository template](../decisions/tooling/2026-11-17-no-repository-template.md) ([tooling-and-distribution.md](../architecture/tooling-and-distribution.md), [roadmap.md](../roadmap.md), `README.md`), and `README.md` installs with `npx`, without the list "Until 1.0". On the instruction of the owner, outside the scope as written: dotbrain is described as an open framework for working with AI agents in a code repository, with the brain as the single source of truth for agents and people, in `README.md`, [overview.md](../architecture/overview.md) and the `description` of `package.json`; and the mentions of the placeholder in the text of [step 4](04-npm-package.md) and of this step are reworded, so that the repository does not contain it. Checked with `npm run check` (types, `lint`, `index --check`, freshness of the cases, 48 tests), a search of the repository for the placeholder (none), and the tarball from `npm pack`: no placeholder in it, and `init` from the installed tarball writes `CLAUDE.md` and `AGENTS.md` linking to the specification at `spec-v1.0.0`, with `lint` and `index --check` passing.
+- 2026-11-17: Review against the brain before the merge into `main` (`brain-review` subagent): no contradiction with the decisions. `README.md` describes the publication already in the commit that is published. The done steps 3, 4 and 6 still link the superseded [decision on distribution channels](../decisions/tooling/2026-10-28-distribution-channels.md) as what they were built on; they are left as the record of their time, and the owner was told.
+- 2026-11-17: Stage 2, publication. `main` was fast-forwarded to the branch of the step, the history squashed into one commit `dotbrain 1.0.0`, and all other local branches deleted, without a backup (instruction of the owner). The annotated tag `spec-v1.0.0` is on that commit. On the instruction of the owner, the remote `origin` is `git@github.com:that-simple/dotbrain.git`, empty before the push (`git ls-remote`), and `main` and the tag are pushed; `git ls-remote origin` shows both on the squashed commit, and the link to the specification at `spec-v1.0.0` on GitHub returns 200. Before the publication `npm run check` passed (48 tests) and `npm pack --dry-run` showed `@that-simple/dotbrain@1.0.0` with 61 files. The owner ran `npm publish`; npm first showed a placeholder version `0.0.0-stage` while the release was staged, then `1.0.0` as `latest`. From the registry, with an empty npm cache, in an empty git repository: `npx --yes @that-simple/dotbrain@1.0.0 init` writes the skeleton, `lint` and `index --check` pass, `CLAUDE.md` links to the specification at `spec-v1.0.0` (200), and `.claude/settings.json` runs `lint` from the package `1.0.0`. Before this commit on `main`, the review against the brain (`brain-review` subagent) found no contradiction, and `npm run check` passes on the final tree (48 tests). The stage and the status `done` share this commit, because the squash leaves no commit of the stage on top of which to close the step. Step done.
 
 ## Open questions
 
