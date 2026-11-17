@@ -1,0 +1,15 @@
+# Review against the brain
+
+A procedure that checks a change against the brain beyond the [validity rules](validity.md#rules), which see the form of the brain but not whether the work agrees with it. A person or an agent runs it before setting a step to `done`, before merging a branch into the main branch and before committing directly to the main branch ([agent contract](agent-contract.md), rule 21).
+
+The reviewer reads the change, the brain's index, the decisions and documents the change touches or should touch, and the step the change belongs to. It reports:
+
+1. Work that contradicts an `accepted` decision or a document of the brain.
+2. A change of the work that departs from a document without updating it in the same pull request (rule 16 of the [agent contract](agent-contract.md)).
+3. A `proposed` decision resolved in the work, or its status changed by someone other than its decider.
+4. Work outside the scope or acceptance criteria of its step, a change without an entry in the step's log, and work on a step that was not `agreed` before the work started (a commit of the work before the commit that sets the step to `agreed`) ([plan before work](documents.md#steps)), and in a step with `stages`, a finished stage without its own entry in the log or its own commit ([size and stages](documents.md#steps)). A change that belongs to no step is allowed when it carries out accepted decisions as a whole; it is then checked against the consequences of those decisions instead, and work beyond them is reported. A change that neither belongs to a step nor carries out an accepted decision is reported, unless it is editorial: a change that does not change the meaning of any rule, decision or document (links, typos, wording, formatting) and does not change the status, the frontmatter or the decision section of an accepted decision. An editorial change is only checked for a change of meaning, including a change of a normative word (MUST, SHOULD, MAY), which is reported.
+5. Failures of the repository's checks, when it runs them, including validity rules and out-of-date generated views.
+
+The change is what the branch changed since it left the main branch (from the merge base: `git diff <main>...HEAD`), together with uncommitted changes. Changes that reached the main branch in the meantime are not part of it; the brain is read as it is now. A change without a branch of its own, already committed directly on the main branch, is named by whoever asks for the review as a range of commits. A reviewer that finds no change reports that instead of reporting no discrepancies.
+
+The result is a list of discrepancies, each naming the file and the document or decision it disagrees with. The reviewer does not fix them: the person the agent works with decides whether the work or the brain changes. A tool that can run the review in a separate context, without the history of the work under review, SHOULD do so, so that the review does not inherit the assumptions of the change's author ([agents adapter](adapters/agents.md#review-against-the-brain)).

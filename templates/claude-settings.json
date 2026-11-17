@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "input=$(cat); case \"$input\" in *'\"stop_hook_active\":true'*|*'\"stop_hook_active\": true'*) exit 0;; esac; cd \"${CLAUDE_PROJECT_DIR:-.}\" || exit 0; command -v npx >/dev/null 2>&1 || exit 0; changed=$(git status --porcelain -- .brain CLAUDE.md AGENTS.md .github/copilot-instructions.md .claude/rules .github/instructions 2>/dev/null) || exit 0; head=$(git rev-parse -q --verify HEAD 2>/dev/null); state=$(git rev-parse --git-path dotbrain-lint-head 2>/dev/null) || exit 0; if [ -z \"$changed\" ] && [ -f \"$state\" ] && [ \"$head\" = \"$(cat \"$state\" 2>/dev/null)\" ]; then exit 0; fi; out=$(npx --yes @that-simple/dotbrain@<version> lint 2>&1) || { printf 'dotbrain lint found problems in the brain; fix them before you end:\\n%s\\n' \"$out\" >&2; exit 2; }; printf '%s\\n' \"$head\" > \"$state\"; exit 0",
+            "timeout": 120,
+            "statusMessage": "Checking the brain with dotbrain lint"
+          }
+        ]
+      }
+    ]
+  }
+}

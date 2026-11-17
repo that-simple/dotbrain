@@ -1,0 +1,263 @@
+In a Polish brain, an agent translated a line of the contract in the managed block and the
+word `Source:` in a rule file. The block is generated with the contract in English and compared as
+a whole, so a translation is a violation.
+V-VIEWS .claude/rules/faktury-2026-11-02-invoice-numbering.md
+V-VIEWS CLAUDE.md
+-- .brain/README.md --
+---
+brain: faktury
+lang: pl
+spec: 1.0.0
+owner: ola
+description: "Źródło prawdy serwisu Faktury: wystawianie i numeracja faktur dla klientów sklepu."
+sections:
+  goal: Cel
+  scope: Zakres
+  out-of-scope: Poza zakresem
+  decisions: Decyzje
+  acceptance: Kryteria akceptacji
+  stages: Etapy
+  log: Przebieg
+  open-questions: Otwarte pytania
+  context: Kontekst
+  options: Opcje
+  recommendation: Rekomendacja
+  decider: Kto i kiedy rozstrzyga
+  decision: Decyzja
+  consequences: Konsekwencje
+  proposed: Do podjęcia
+  accepted: Podjęte
+  rejected: Odrzucone
+  superseded: Zastąpione
+  status: Status
+  assignee: Wykonawcy
+---
+# Faktury
+
+Serwis Faktury wystawia faktury dla zamówień sklepu i nadaje im numery. Brain jest źródłem prawdy produktu, architektury, infrastruktury i kodu: decyzja zapada najpierw tutaj, potem trafia do kodu, a zmiana, która odchodzi od dokumentu, aktualizuje go w tym samym PR.
+
+<!-- BEGIN:dotbrain index -->
+<!-- Generated from document frontmatter. Do not edit by hand; regenerate on conflict. -->
+
+`architecture/`:
+
+- [overview.md](architecture/overview.md): Architektura serwisu Faktury: komponenty i model danych.
+
+`decisions/`:
+
+- [decisions/README.md](decisions/README.md): Decyzje: Do podjęcia, Podjęte, Odrzucone, Zastąpione
+
+`steps/`:
+
+- [01-walking-skeleton.md](steps/01-walking-skeleton.md): Wdrożone API, które wystawia fakturę z numerem. (`in-progress`)
+<!-- END:dotbrain index -->
+
+## Kroki
+
+Fazy rozbijamy na kroki w `steps/NN-krotka-nazwa.md`. Krok to spec, według którego powstaje praca; jego status jest we frontmatterze.
+
+## Konwencje
+
+- Decyzje leżą w podkatalogach `decisions/` per domena (`decisions/<domena>/`), np. `process/` dla zasad pracy. Domena to krótka angielska nazwa w kebab-case. Nową zakładamy, gdy decyzja nie pasuje do żadnej istniejącej; decyzja dotycząca kilku domen idzie do tej, w której ma największy skutek.
+-- .brain/architecture/overview.md --
+---
+description: "Architektura serwisu Faktury: komponenty i model danych."
+---
+# Przegląd
+
+Serwis to jedno API z bazą PostgreSQL. Faktura ma numer, klienta, pozycje i PDF.
+-- .brain/decisions/README.md --
+---
+description: "Decyzje: Do podjęcia, Podjęte, Odrzucone, Zastąpione"
+---
+# Decyzje
+
+<!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->
+
+## Do podjęcia
+
+- [Przechowywanie PDF-ów faktur](data/2026-11-03-invoice-pdf-storage.md): Czy PDF-y faktur przechowujemy w bazie, czy w object storage.
+
+## Podjęte
+
+- [Języki pracy](process/2026-11-01-languages.md): Kod, identyfikatory, komentarze, komunikaty, commity, gałęzie i PR po angielsku; dokumentacja po polsku. (2026-11-01)
+- [Brain razem z pracą](process/2026-11-01-order-of-work.md): Zmiany w brainie idą w tym samym PR co praca, która z nich wynika. (2026-11-01)
+- [Numeracja faktur](domain/2026-11-02-invoice-numbering.md): Faktury mają numery `FV/RRRR/MM/NNNN`, nadawane w transakcji razem z zapisem faktury. (2026-11-02)
+-- .brain/decisions/data/2026-11-03-invoice-pdf-storage.md --
+---
+status: proposed
+description: "Czy PDF-y faktur przechowujemy w bazie, czy w object storage."
+---
+# Przechowywanie PDF-ów faktur
+
+## Kontekst
+
+Każda faktura ma PDF, który klient pobiera przez lata.
+
+## Opcje
+
+1. **W bazie:** jedna kopia zapasowa, ale baza rośnie.
+2. **W object storage:** tanio i bez limitu, ale druga usługa.
+
+## Kto i kiedy rozstrzyga
+
+Ola, przed krokiem 2.
+-- .brain/decisions/domain/2026-11-02-invoice-numbering.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: "src/invoices/**"
+description: "Faktury mają numery `FV/RRRR/MM/NNNN`, nadawane w transakcji razem z zapisem faktury."
+---
+# Numeracja faktur
+
+## Decyzja
+
+Numer faktury ma postać `FV/RRRR/MM/NNNN` i jest nadawany w tej samej transakcji, w której zapisujemy fakturę. Numeracja zaczyna się od `0001` w każdym miesiącu ([model danych](../../architecture/overview.md)).
+-- .brain/decisions/process/2026-11-01-languages.md --
+---
+status: accepted
+decided: 2026-11-01
+apply: always
+description: "Kod, identyfikatory, komentarze, komunikaty, commity, gałęzie i PR po angielsku; dokumentacja po polsku."
+---
+# Języki pracy
+
+## Decyzja
+
+Kod, identyfikatory, komentarze, komunikaty logów i błędów, commity, nazwy gałęzi i PR są po angielsku. Dokumentacja w brainie jest po polsku.
+-- .brain/decisions/process/2026-11-01-order-of-work.md --
+---
+status: accepted
+decided: 2026-11-01
+apply: always
+description: "Zmiany w brainie idą w tym samym PR co praca, która z nich wynika."
+---
+# Brain razem z pracą
+
+## Kontekst
+
+Kolejność pracy to decyzja zespołu; to domyślne ustawienie szablonu startowego dotbrain.
+
+## Decyzja
+
+Zmiany w brainie (decyzje, także `proposed`, kroki, dokumenty) idą w tym samym PR co praca, która z nich wynika, w dowolnych jego commitach, także w tym samym commicie co praca. Wyjątkiem jest krok: commit, który ustawia mu `agreed`, jest przed pracą nad nim, a każdy skończony etap to osobny commit. W tym PR są też widoki generowane i bloki zarządzane plików instrukcji. Decyzja `proposed` albo nowy krok, które dotyczą pracy innych osób, mogą trafić na główną gałąź wcześniej osobnym małym PR.
+-- .brain/steps/01-walking-skeleton.md --
+---
+status: in-progress
+assignee: [user:ola]
+description: "Wdrożone API, które wystawia fakturę z numerem."
+---
+# Krok 01: szkielet
+
+<!-- BEGIN:dotbrain status -->
+Status: `in-progress` · Wykonawcy: user:ola
+<!-- END:dotbrain status -->
+
+## Cel
+
+Sklep wystawia fakturę dla zamówienia przez API.
+
+## Zakres
+
+- `POST /invoices` z numeracją według [decyzji](../decisions/domain/2026-11-02-invoice-numbering.md).
+
+## Kryteria akceptacji
+
+1. Faktura wystawiona przez API ma numer `FV/RRRR/MM/NNNN`.
+
+## Przebieg
+
+- 2026-11-02: Start; endpoint i numeracja w transakcji, sprawdzone testem równoległego wystawiania.
+-- .claude/rules/faktury-2026-11-02-invoice-numbering.md --
+---
+paths:
+  - "src/invoices/**"
+---
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+### Numeracja faktur
+
+Numer faktury ma postać `FV/RRRR/MM/NNNN` i jest nadawany w tej samej transakcji, w której zapisujemy fakturę. Numeracja zaczyna się od `0001` w każdym miesiącu ([model danych](../../.brain/architecture/overview.md)).
+
+Źródło: [decisions/domain/2026-11-02-invoice-numbering.md](../../.brain/decisions/domain/2026-11-02-invoice-numbering.md)
+<!-- END:dotbrain -->
+-- .claude/rules/faktury.md --
+---
+paths:
+  - ".brain/**"
+---
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## Work on the brain
+
+These rules apply to every change in `.brain/`, in addition to the managed block of the root instruction file.
+
+- A new decision is a new file `YYYY-MM-DD-slug.md` in `.brain/decisions/` (in the subdirectory the index's conventions name, if any) with frontmatter (`status`, `description`, and `decided` once resolved) and the sections its status requires, headed with labels from the `sections` map of the manifest. Before adding one, check the descriptions of existing decisions; if one already covers the matter, report it instead.
+- After adding a decision or changing its frontmatter or title, regenerate `.brain/decisions/README.md`. After adding a document or changing its `description`, regenerate the index block in `.brain/README.md`. After changing the `status` or `assignee` of a step, regenerate its status line and the index block. Never edit generated views by hand.
+- Resolve a conflict in a generated view by regenerating it. In the log of a step, keep the entries of both sides, sorted by date, with those already on the main branch first within a date. If a step added on your branch has the number of a step already on the main branch, give yours the first free number and fix the links to it. Resolve any other conflict in a document by reading both versions and the version before the change; merge what does not contradict, and record a contradiction as a `proposed` decision with both options. If a decision accepted on your branch contradicts one accepted on the main branch, turn yours back to `proposed` as that decision; until it is resolved, the main branch's version binds.
+- When the work on a step starts, set its `status` to `in-progress` and its `assignee` to the people doing the work (in the first commit of the work). Do a step with `stages` one stage at a time, each leaving the work in a working state (one commit each). Record progress in its log, one list entry per change or finished stage, starting with the date (`- YYYY-MM-DD: …`).
+- Keep raw material (recordings, transcripts, emails, PDFs, contracts, images) at its source: write to the brain what follows from it (decisions, knowledge, open questions) with a link to the source, never the material itself.
+- Do not put run instructions, commands, personal notes or personal data into the brain; commands go to the repository's `README.md` or outside the managed blocks of instruction files.
+- If the `dotbrain` CLI is available, run `dotbrain lint` before ending work that changed the brain, and fix what it reports.
+<!-- END:dotbrain -->
+-- CLAUDE.md --
+# Faktury
+
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## The brain is the source of truth
+
+Źródło prawdy serwisu Faktury: wystawianie i numeracja faktur dla klientów sklepu. The brain is in `.brain/`: decisions, knowledge and the plan of the work. If the brain and the work (code, process, documents outside the brain, this file included) disagree, the brain wins.
+
+- Zacznij od `.brain/README.md`, indeksu dokumentów: scan the `description` of each document before reading whole documents, and read only what the task concerns.
+- Asked about the project, answer from the brain, link the documents the answer rests on, and say when the brain does not cover the question.
+- A decision is made in the brain first, then carried into the work. A change that departs from a document updates the document in the same change, for code in the same pull request.
+- Do not resolve decisions with `status: proposed`: prepare options and a recommendation if useful, and ask. Change their status only on the explicit instruction of the person who decides.
+- A decision found in a conversation, transcript, chat or email is recorded as `proposed` with its source, even if it was made there.
+- Rules with `apply: always` are in this block and apply to every task; rules with a glob apply when working with matching files.
+- Report any discrepancy between the brain and the work; do not leave it or fix it silently.
+- Keep to the scope and acceptance criteria of the step you work on; propose anything outside them. A new step is only written, with `status: draft`; a person sets it to `agreed`, and the work starts after that, on a separate instruction.
+
+## Working in the repository
+
+- Write to the brain in its language (`lang` in the manifest); talk to people in their language.
+- The languages of code, comments, commits, branch names and pull requests, and the order of work (brain changes with the work or before it), are decisions in the brain with `apply: always`; without them, ask before assuming.
+- Before committing a finished stage of a step and before setting a step to `done`, run the repository's checks and record in its log what was checked and how.
+- Before setting a step to `done`, merging a branch into the main branch or committing directly to it, review the change against the brain (the review procedure of the dotbrain specification) and report the discrepancies.
+
+## Claude Code
+
+- Start writing a new step, and carrying out an `agreed` one, in plan mode. If the session is not in plan mode, enter it and present the plan; write the step or do the work only after the person accepts the plan. Accepting the plan does not agree the step: a new step is still written with `status: draft`.
+
+## Rules for this brain
+
+### Języki pracy
+
+Kod, identyfikatory, komentarze, komunikaty logów i błędów, commity, nazwy gałęzi i PR są po angielsku. Dokumentacja w brainie jest po polsku.
+
+Source: [decisions/process/2026-11-01-languages.md](.brain/decisions/process/2026-11-01-languages.md)
+
+### Brain razem z pracą
+
+Zmiany w brainie (decyzje, także `proposed`, kroki, dokumenty) idą w tym samym PR co praca, która z nich wynika, w dowolnych jego commitach, także w tym samym commicie co praca. Wyjątkiem jest krok: commit, który ustawia mu `agreed`, jest przed pracą nad nim, a każdy skończony etap to osobny commit. W tym PR są też widoki generowane i bloki zarządzane plików instrukcji. Decyzja `proposed` albo nowy krok, które dotyczą pracy innych osób, mogą trafić na główną gałąź wcześniej osobnym małym PR.
+
+Source: [decisions/process/2026-11-01-order-of-work.md](.brain/decisions/process/2026-11-01-order-of-work.md)
+
+## Rules for specific files
+
+- `src/invoices/**`: [Numeracja faktur](.brain/decisions/domain/2026-11-02-invoice-numbering.md)
+
+Specification: [dotbrain 1.0.0](https://github.com/that-simple/dotbrain/blob/spec-v1.0.0/spec/README.md)
+<!-- END:dotbrain -->
+
+## Komendy
+
+- `npm test` uruchamia testy.
+-- src/invoices/number.ts --
+export function nextNumber(): string {
+  return "FV/2026/11/0001";
+}

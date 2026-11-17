@@ -1,0 +1,32 @@
+Raw material in the brain: an image and a PDF.
+V-CONTENT .brain/architecture/diagram.png
+V-CONTENT .brain/contracts/agreement.pdf
+-- .brain/README.md --
+---
+brain: example
+lang: en
+spec: 1.0.0
+description: "One sentence about what the brain covers."
+---
+# Example
+
+What this brain is about.
+
+<!-- BEGIN:dotbrain index -->
+<!-- Generated from document frontmatter. Do not edit by hand; regenerate on conflict. -->
+
+`decisions/`:
+
+- [decisions/README.md](decisions/README.md): Decisions: Proposed, Accepted, Rejected, Superseded
+<!-- END:dotbrain index -->
+-- .brain/architecture/diagram.png --
+not really an image
+-- .brain/contracts/agreement.pdf --
+not really a pdf
+-- .brain/decisions/README.md --
+---
+description: "Decisions: Proposed, Accepted, Rejected, Superseded"
+---
+# Decisions
+
+<!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->

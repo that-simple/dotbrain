@@ -1,0 +1,23 @@
+`brain` is not kebab-case, and `spec` is 0.1, the draft before 1.0.0.
+V-MANIFEST .brain/README.md
+-- .brain/README.md --
+---
+brain: Example
+lang: en
+spec: 0.1
+description: "One sentence about what the brain covers."
+---
+# Example
+
+What this brain is about.
+
+<!-- BEGIN:dotbrain index -->
+<!-- Generated from document frontmatter. Do not edit by hand; regenerate on conflict. -->
+<!-- END:dotbrain index -->
+-- .brain/decisions/README.md --
+---
+description: "Decisions: Proposed, Accepted, Rejected, Superseded"
+---
+# Decisions
+
+<!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->

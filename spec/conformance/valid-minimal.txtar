@@ -1,0 +1,26 @@
+The minimal valid brain from validity.md, in English.
+-- .brain/README.md --
+---
+brain: example
+lang: en
+spec: 1.0.0
+description: "One sentence about what the brain covers."
+---
+# Example
+
+What this brain is about.
+
+<!-- BEGIN:dotbrain index -->
+<!-- Generated from document frontmatter. Do not edit by hand; regenerate on conflict. -->
+
+`decisions/`:
+
+- [decisions/README.md](decisions/README.md): Decisions: Proposed, Accepted, Rejected, Superseded
+<!-- END:dotbrain index -->
+-- .brain/decisions/README.md --
+---
+description: "Decisions: Proposed, Accepted, Rejected, Superseded"
+---
+# Decisions
+
+<!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->

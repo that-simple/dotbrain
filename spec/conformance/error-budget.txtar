@@ -1,0 +1,803 @@
+Twelve rules with `apply: always`, one of them longer than 150 words.
+V-BUDGET .brain/README.md
+V-BUDGET .brain/decisions/process/2026-11-02-rule-00.md
+-- .brain/AGENTS.md --
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## Work on the brain
+
+These rules apply to every change in `.brain/`, in addition to the managed block of the root instruction file.
+
+- A new decision is a new file `YYYY-MM-DD-slug.md` in `.brain/decisions/` (in the subdirectory the index's conventions name, if any) with frontmatter (`status`, `description`, and `decided` once resolved) and the sections its status requires, headed with labels from the `sections` map of the manifest. Before adding one, check the descriptions of existing decisions; if one already covers the matter, report it instead.
+- After adding a decision or changing its frontmatter or title, regenerate `.brain/decisions/README.md`. After adding a document or changing its `description`, regenerate the index block in `.brain/README.md`. After changing the `status` or `assignee` of a step, regenerate its status line and the index block. Never edit generated views by hand.
+- Resolve a conflict in a generated view by regenerating it. In the log of a step, keep the entries of both sides, sorted by date, with those already on the main branch first within a date. If a step added on your branch has the number of a step already on the main branch, give yours the first free number and fix the links to it. Resolve any other conflict in a document by reading both versions and the version before the change; merge what does not contradict, and record a contradiction as a `proposed` decision with both options. If a decision accepted on your branch contradicts one accepted on the main branch, turn yours back to `proposed` as that decision; until it is resolved, the main branch's version binds.
+- When the work on a step starts, set its `status` to `in-progress` and its `assignee` to the people doing the work (in the first commit of the work). Do a step with `stages` one stage at a time, each leaving the work in a working state (one commit each). Record progress in its log, one list entry per change or finished stage, starting with the date (`- YYYY-MM-DD: …`).
+- Keep raw material (recordings, transcripts, emails, PDFs, contracts, images) at its source: write to the brain what follows from it (decisions, knowledge, open questions) with a link to the source, never the material itself.
+- Do not put run instructions, commands, personal notes or personal data into the brain; commands go to the repository's `README.md` or outside the managed blocks of instruction files.
+- If the `dotbrain` CLI is available, run `dotbrain lint` before ending work that changed the brain, and fix what it reports.
+<!-- END:dotbrain -->
+-- .brain/README.md --
+---
+brain: notes-api
+lang: en
+spec: 1.0.0
+owner: ana
+description: "Source of truth for the Notes API: the service that stores notes for the Notes apps."
+---
+# Notes API
+
+The Notes API stores the notes of the Notes web and mobile apps. The brain is the source of truth for its product, architecture, infrastructure and code: a decision is made here first, then carried into the code, and a change that departs from a document updates it in the same pull request.
+
+<!-- BEGIN:dotbrain index -->
+<!-- Generated from document frontmatter. Do not edit by hand; regenerate on conflict. -->
+
+- [risks.md](risks.md): Risks of the Notes API with their impact and mitigation.
+- [roadmap.md](roadmap.md): Phases of the Notes API and the gates between them.
+
+`architecture/`:
+
+- [overview.md](architecture/overview.md): Architecture of the Notes API: components, data and hosting.
+
+`decisions/`:
+
+- [decisions/README.md](decisions/README.md): Decisions: Proposed, Accepted, Rejected, Superseded
+
+`steps/`:
+
+- [01-walking-skeleton.md](steps/01-walking-skeleton.md): A deployed API that creates, lists and deletes notes. (`in-progress`)
+- [02-sharing.md](steps/02-sharing.md): Notes shared with other users. (`draft`)
+<!-- END:dotbrain index -->
+
+## Steps
+
+Phases of the [roadmap](roadmap.md) are split into steps in `steps/NN-short-name.md`. A step is the spec the work is done by; its status is in the frontmatter (`draft`, `agreed`, `in-progress`, `done`).
+
+## Conventions
+
+- Decisions are in subdirectories of `decisions/` by domain (`decisions/<domain>/`), such as `process/` for the rules of work. A domain is a short English name in kebab-case. A new domain is created when a decision fits none of the existing ones; a decision that concerns several domains goes to the one where it has the most effect.
+-- .brain/architecture/overview.md --
+---
+description: "Architecture of the Notes API: components, data and hosting."
+---
+# Overview
+
+The API is one service in front of one database.
+
+## Data
+
+Notes are rows with an owner, a body and the timestamps `created_at`, `updated_at` and `deleted_at`.
+-- .brain/decisions/README.md --
+---
+description: "Decisions: Proposed, Accepted, Rejected, Superseded"
+---
+# Decisions
+
+<!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->
+
+## Proposed
+
+- [Database for notes](data/2026-11-03-database.md): Whether notes are stored in SQLite or in PostgreSQL.
+
+## Accepted
+
+- [Languages of the work](process/2026-11-01-languages.md): Code, identifiers, comments, log and error messages, commits, branch names and pull requests are in English. (2026-11-01)
+- [Brain changes with the work](process/2026-11-01-order-of-work.md): Changes to the brain go in the same pull request as the work that follows from them. (2026-11-01)
+- [Hosting on Fly.io](infrastructure/2026-11-02-hosting-on-fly-io.md): The API runs on Fly.io, in one region close to most users. (2026-11-02)
+- [Rule 0](process/2026-11-02-rule-00.md): A long rule. (2026-11-02)
+- [Rule 1](process/2026-11-02-rule-01.md): Rule number 1. (2026-11-02)
+- [Rule 2](process/2026-11-02-rule-02.md): Rule number 2. (2026-11-02)
+- [Rule 3](process/2026-11-02-rule-03.md): Rule number 3. (2026-11-02)
+- [Rule 4](process/2026-11-02-rule-04.md): Rule number 4. (2026-11-02)
+- [Rule 5](process/2026-11-02-rule-05.md): Rule number 5. (2026-11-02)
+- [Rule 6](process/2026-11-02-rule-06.md): Rule number 6. (2026-11-02)
+- [Rule 7](process/2026-11-02-rule-07.md): Rule number 7. (2026-11-02)
+- [Rule 8](process/2026-11-02-rule-08.md): Rule number 8. (2026-11-02)
+- [Rule 9](process/2026-11-02-rule-09.md): Rule number 9. (2026-11-02)
+- [Soft delete of notes](api/2026-11-02-soft-delete.md): Deleting a note sets `deleted_at` instead of removing the row. (2026-11-02)
+
+## Rejected
+
+- [GraphQL endpoint](api/2026-11-02-graphql-endpoint.md): The API does not offer GraphQL; it stays REST only. (2026-11-02)
+
+## Superseded
+
+- [Hosting on Heroku](infrastructure/2026-10-30-hosting-on-heroku.md): The API runs on Heroku. (2026-10-30) → [2026-11-02-hosting-on-fly-io](infrastructure/2026-11-02-hosting-on-fly-io.md)
+-- .brain/decisions/api/2026-11-02-graphql-endpoint.md --
+---
+status: rejected
+decided: 2026-11-02
+description: "The API does not offer GraphQL; it stays REST only."
+---
+# GraphQL endpoint
+
+## Decision
+
+Rejected: the apps need only a few fixed queries, and one style of API is enough.
+-- .brain/decisions/api/2026-11-02-soft-delete.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: ["src/notes/**", "*.sql"]
+description: "Deleting a note sets `deleted_at` instead of removing the row."
+---
+# Soft delete of notes
+
+## Context
+
+Users restore notes deleted by mistake, and support needs the history of a note.
+
+## Decision
+
+Deleting a note sets `deleted_at` instead of removing the row, and a deleted note answers `404`. Queries and migrations filter on `deleted_at` ([overview](../../architecture/overview.md#data)).
+-- .brain/decisions/data/2026-11-03-database.md --
+---
+status: proposed
+description: "Whether notes are stored in SQLite or in PostgreSQL."
+---
+# Database for notes
+
+## Context
+
+The first release needs a database. The team has used both.
+
+## Options
+
+1. **SQLite:** one file, no server, easy backups; limited concurrent writes.
+2. **PostgreSQL:** a managed service on the host; one more service to run.
+
+## Recommendation
+
+PostgreSQL, because the host offers it managed.
+
+## Who decides and when
+
+Ana, before step 1 is done.
+-- .brain/decisions/infrastructure/2026-10-30-hosting-on-heroku.md --
+---
+status: superseded
+decided: 2026-10-30
+superseded-by: 2026-11-02-hosting-on-fly-io
+description: "The API runs on Heroku."
+---
+# Hosting on Heroku
+
+## Decision
+
+The API runs on one Heroku dyno with Heroku Postgres.
+-- .brain/decisions/infrastructure/2026-11-02-hosting-on-fly-io.md --
+---
+status: accepted
+decided: 2026-11-02
+description: "The API runs on Fly.io, in one region close to most users."
+---
+# Hosting on Fly.io
+
+## Context
+
+Replaces [hosting on Heroku](2026-10-30-hosting-on-heroku.md): the free tier ended.
+
+## Decision
+
+The API runs on Fly.io in one region close to most users, with a managed Postgres.
+-- .brain/decisions/process/2026-11-01-languages.md --
+---
+status: accepted
+decided: 2026-11-01
+apply: always
+description: "Code, identifiers, comments, log and error messages, commits, branch names and pull requests are in English."
+---
+# Languages of the work
+
+## Decision
+
+Code, identifiers, comments, log and error messages, commits, branch names and pull requests are in English. Documentation in the brain is in English, the language of the brain.
+-- .brain/decisions/process/2026-11-01-order-of-work.md --
+---
+status: accepted
+decided: 2026-11-01
+apply: always
+description: "Changes to the brain go in the same pull request as the work that follows from them."
+---
+# Brain changes with the work
+
+## Context
+
+The order of work is a decision of the team (dotbrain agent contract, rule 20). This is the default of the dotbrain starter; change it if the team works otherwise, for example when every change to the brain goes to the main branch in a separate pull request before the work.
+
+## Decision
+
+Changes to the brain (decisions, including `proposed` ones, steps, documents) go in the same pull request as the work that follows from them, in any of its commits, including the same commit as the work. The exception is a step: the commit that sets it to `agreed` comes before the work on it, and every finished stage is a separate commit. That pull request also carries the generated views and the managed blocks of instruction files that follow from the changed documents. A `proposed` decision or a new step that affects the work of other people may go to the main branch earlier in a separate small pull request.
+-- .brain/decisions/process/2026-11-02-rule-00.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "A long rule."
+---
+# Rule 0
+
+## Decision
+
+word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word
+-- .brain/decisions/process/2026-11-02-rule-01.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 1."
+---
+# Rule 1
+
+## Decision
+
+Rule number 1.
+-- .brain/decisions/process/2026-11-02-rule-02.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 2."
+---
+# Rule 2
+
+## Decision
+
+Rule number 2.
+-- .brain/decisions/process/2026-11-02-rule-03.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 3."
+---
+# Rule 3
+
+## Decision
+
+Rule number 3.
+-- .brain/decisions/process/2026-11-02-rule-04.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 4."
+---
+# Rule 4
+
+## Decision
+
+Rule number 4.
+-- .brain/decisions/process/2026-11-02-rule-05.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 5."
+---
+# Rule 5
+
+## Decision
+
+Rule number 5.
+-- .brain/decisions/process/2026-11-02-rule-06.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 6."
+---
+# Rule 6
+
+## Decision
+
+Rule number 6.
+-- .brain/decisions/process/2026-11-02-rule-07.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 7."
+---
+# Rule 7
+
+## Decision
+
+Rule number 7.
+-- .brain/decisions/process/2026-11-02-rule-08.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 8."
+---
+# Rule 8
+
+## Decision
+
+Rule number 8.
+-- .brain/decisions/process/2026-11-02-rule-09.md --
+---
+status: accepted
+decided: 2026-11-02
+apply: always
+description: "Rule number 9."
+---
+# Rule 9
+
+## Decision
+
+Rule number 9.
+-- .brain/risks.md --
+---
+description: "Risks of the Notes API with their impact and mitigation."
+---
+# Risks
+
+| Risk | Impact | Mitigation |
+| --- | --- | --- |
+| Data loss | High | Daily backups, soft delete |
+-- .brain/roadmap.md --
+---
+description: "Phases of the Notes API and the gates between them."
+---
+# Roadmap
+
+| Phase | Scope | Gate |
+| --- | --- | --- |
+| MVP | Create, list and delete notes | The web app uses the API |
+| Sharing | Shared notes | [Step 2](steps/02-sharing.md) done |
+-- .brain/steps/01-walking-skeleton.md --
+---
+status: in-progress
+assignee: [user:ana, user:ben]
+description: "A deployed API that creates, lists and deletes notes."
+---
+# Step 01: walking skeleton
+
+<!-- BEGIN:dotbrain status -->
+Status: `in-progress` · Assignee: user:ana, user:ben
+<!-- END:dotbrain status -->
+
+## Goal
+
+A deployed API with the three basic endpoints, so that the web app can start using it.
+
+## Scope
+
+- `POST /notes`, `GET /notes`, `DELETE /notes/{id}`.
+- Deployment on the host from [the hosting decision](../decisions/infrastructure/2026-11-02-hosting-on-fly-io.md).
+
+## Acceptance criteria
+
+1. The three endpoints answer on the deployed URL.
+2. Deleting a note follows the [soft delete decision](../decisions/api/2026-11-02-soft-delete.md).
+
+## Log
+
+- 2026-11-02: Started; endpoints sketched.
+- 2026-11-03: `DELETE /notes/{id}` with soft delete; checked with the tests of the endpoint.
+  - Deployment still open.
+-- .brain/steps/02-sharing.md --
+---
+status: draft
+description: "Notes shared with other users."
+---
+# Step 02: sharing
+
+<!-- BEGIN:dotbrain status -->
+Status: `draft`
+<!-- END:dotbrain status -->
+
+## Goal
+
+Users share a note with other users.
+
+## Scope
+
+Sharing by email address.
+
+## Acceptance criteria
+
+1. A shared note is visible to the other user.
+-- .claude/rules/notes-api-2026-11-02-soft-delete.md --
+---
+paths:
+  - "src/notes/**"
+  - "/*.sql"
+---
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+### Soft delete of notes
+
+Deleting a note sets `deleted_at` instead of removing the row, and a deleted note answers `404`. Queries and migrations filter on `deleted_at` ([overview](../../.brain/architecture/overview.md#data)).
+
+Source: [decisions/api/2026-11-02-soft-delete.md](../../.brain/decisions/api/2026-11-02-soft-delete.md)
+<!-- END:dotbrain -->
+-- .claude/rules/notes-api.md --
+---
+paths:
+  - ".brain/**"
+---
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## Work on the brain
+
+These rules apply to every change in `.brain/`, in addition to the managed block of the root instruction file.
+
+- A new decision is a new file `YYYY-MM-DD-slug.md` in `.brain/decisions/` (in the subdirectory the index's conventions name, if any) with frontmatter (`status`, `description`, and `decided` once resolved) and the sections its status requires, headed with labels from the `sections` map of the manifest. Before adding one, check the descriptions of existing decisions; if one already covers the matter, report it instead.
+- After adding a decision or changing its frontmatter or title, regenerate `.brain/decisions/README.md`. After adding a document or changing its `description`, regenerate the index block in `.brain/README.md`. After changing the `status` or `assignee` of a step, regenerate its status line and the index block. Never edit generated views by hand.
+- Resolve a conflict in a generated view by regenerating it. In the log of a step, keep the entries of both sides, sorted by date, with those already on the main branch first within a date. If a step added on your branch has the number of a step already on the main branch, give yours the first free number and fix the links to it. Resolve any other conflict in a document by reading both versions and the version before the change; merge what does not contradict, and record a contradiction as a `proposed` decision with both options. If a decision accepted on your branch contradicts one accepted on the main branch, turn yours back to `proposed` as that decision; until it is resolved, the main branch's version binds.
+- When the work on a step starts, set its `status` to `in-progress` and its `assignee` to the people doing the work (in the first commit of the work). Do a step with `stages` one stage at a time, each leaving the work in a working state (one commit each). Record progress in its log, one list entry per change or finished stage, starting with the date (`- YYYY-MM-DD: …`).
+- Keep raw material (recordings, transcripts, emails, PDFs, contracts, images) at its source: write to the brain what follows from it (decisions, knowledge, open questions) with a link to the source, never the material itself.
+- Do not put run instructions, commands, personal notes or personal data into the brain; commands go to the repository's `README.md` or outside the managed blocks of instruction files.
+- If the `dotbrain` CLI is available, run `dotbrain lint` before ending work that changed the brain, and fix what it reports.
+<!-- END:dotbrain -->
+-- .github/copilot-instructions.md --
+# Notes API
+
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## The brain is the source of truth
+
+Source of truth for the Notes API: the service that stores notes for the Notes apps. The brain is in `.brain/`: decisions, knowledge and the plan of the work. If the brain and the work (code, process, documents outside the brain, this file included) disagree, the brain wins.
+
+- Start with `.brain/README.md`, the index of documents: scan the `description` of each document before reading whole documents, and read only what the task concerns.
+- Asked about the project, answer from the brain, link the documents the answer rests on, and say when the brain does not cover the question.
+- A decision is made in the brain first, then carried into the work. A change that departs from a document updates the document in the same change, for code in the same pull request.
+- Do not resolve decisions with `status: proposed`: prepare options and a recommendation if useful, and ask. Change their status only on the explicit instruction of the person who decides.
+- A decision found in a conversation, transcript, chat or email is recorded as `proposed` with its source, even if it was made there.
+- Rules with `apply: always` are in this block and apply to every task; rules with a glob apply when working with matching files.
+- Report any discrepancy between the brain and the work; do not leave it or fix it silently.
+- Keep to the scope and acceptance criteria of the step you work on; propose anything outside them. A new step is only written, with `status: draft`; a person sets it to `agreed`, and the work starts after that, on a separate instruction.
+
+## Working in the repository
+
+- Write to the brain in its language (`lang` in the manifest); talk to people in their language.
+- The languages of code, comments, commits, branch names and pull requests, and the order of work (brain changes with the work or before it), are decisions in the brain with `apply: always`; without them, ask before assuming.
+- Before committing a finished stage of a step and before setting a step to `done`, run the repository's checks and record in its log what was checked and how.
+- Before setting a step to `done`, merging a branch into the main branch or committing directly to it, review the change against the brain (the review procedure of the dotbrain specification) and report the discrepancies.
+
+## Rules for this brain
+
+### Languages of the work
+
+Code, identifiers, comments, log and error messages, commits, branch names and pull requests are in English. Documentation in the brain is in English, the language of the brain.
+
+Source: [decisions/process/2026-11-01-languages.md](../.brain/decisions/process/2026-11-01-languages.md)
+
+### Brain changes with the work
+
+Changes to the brain (decisions, including `proposed` ones, steps, documents) go in the same pull request as the work that follows from them, in any of its commits, including the same commit as the work. The exception is a step: the commit that sets it to `agreed` comes before the work on it, and every finished stage is a separate commit. That pull request also carries the generated views and the managed blocks of instruction files that follow from the changed documents. A `proposed` decision or a new step that affects the work of other people may go to the main branch earlier in a separate small pull request.
+
+Source: [decisions/process/2026-11-01-order-of-work.md](../.brain/decisions/process/2026-11-01-order-of-work.md)
+
+### Rule 0
+
+word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word
+
+Source: [decisions/process/2026-11-02-rule-00.md](../.brain/decisions/process/2026-11-02-rule-00.md)
+
+### Rule 1
+
+Rule number 1.
+
+Source: [decisions/process/2026-11-02-rule-01.md](../.brain/decisions/process/2026-11-02-rule-01.md)
+
+### Rule 2
+
+Rule number 2.
+
+Source: [decisions/process/2026-11-02-rule-02.md](../.brain/decisions/process/2026-11-02-rule-02.md)
+
+### Rule 3
+
+Rule number 3.
+
+Source: [decisions/process/2026-11-02-rule-03.md](../.brain/decisions/process/2026-11-02-rule-03.md)
+
+### Rule 4
+
+Rule number 4.
+
+Source: [decisions/process/2026-11-02-rule-04.md](../.brain/decisions/process/2026-11-02-rule-04.md)
+
+### Rule 5
+
+Rule number 5.
+
+Source: [decisions/process/2026-11-02-rule-05.md](../.brain/decisions/process/2026-11-02-rule-05.md)
+
+### Rule 6
+
+Rule number 6.
+
+Source: [decisions/process/2026-11-02-rule-06.md](../.brain/decisions/process/2026-11-02-rule-06.md)
+
+### Rule 7
+
+Rule number 7.
+
+Source: [decisions/process/2026-11-02-rule-07.md](../.brain/decisions/process/2026-11-02-rule-07.md)
+
+### Rule 8
+
+Rule number 8.
+
+Source: [decisions/process/2026-11-02-rule-08.md](../.brain/decisions/process/2026-11-02-rule-08.md)
+
+### Rule 9
+
+Rule number 9.
+
+Source: [decisions/process/2026-11-02-rule-09.md](../.brain/decisions/process/2026-11-02-rule-09.md)
+
+## Rules for specific files
+
+- `src/notes/**`: [Soft delete of notes](../.brain/decisions/api/2026-11-02-soft-delete.md)
+- `*.sql`: [Soft delete of notes](../.brain/decisions/api/2026-11-02-soft-delete.md)
+
+Specification: [dotbrain 1.0.0](https://github.com/that-simple/dotbrain/blob/spec-v1.0.0/spec/README.md)
+<!-- END:dotbrain -->
+-- .github/instructions/notes-api-2026-11-02-soft-delete.instructions.md --
+---
+applyTo: "src/notes/**,*.sql"
+---
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+### Soft delete of notes
+
+Deleting a note sets `deleted_at` instead of removing the row, and a deleted note answers `404`. Queries and migrations filter on `deleted_at` ([overview](../../.brain/architecture/overview.md#data)).
+
+Source: [decisions/api/2026-11-02-soft-delete.md](../../.brain/decisions/api/2026-11-02-soft-delete.md)
+<!-- END:dotbrain -->
+-- .github/instructions/notes-api.instructions.md --
+---
+applyTo: ".brain/**"
+---
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## Work on the brain
+
+These rules apply to every change in `.brain/`, in addition to the managed block of the root instruction file.
+
+- A new decision is a new file `YYYY-MM-DD-slug.md` in `.brain/decisions/` (in the subdirectory the index's conventions name, if any) with frontmatter (`status`, `description`, and `decided` once resolved) and the sections its status requires, headed with labels from the `sections` map of the manifest. Before adding one, check the descriptions of existing decisions; if one already covers the matter, report it instead.
+- After adding a decision or changing its frontmatter or title, regenerate `.brain/decisions/README.md`. After adding a document or changing its `description`, regenerate the index block in `.brain/README.md`. After changing the `status` or `assignee` of a step, regenerate its status line and the index block. Never edit generated views by hand.
+- Resolve a conflict in a generated view by regenerating it. In the log of a step, keep the entries of both sides, sorted by date, with those already on the main branch first within a date. If a step added on your branch has the number of a step already on the main branch, give yours the first free number and fix the links to it. Resolve any other conflict in a document by reading both versions and the version before the change; merge what does not contradict, and record a contradiction as a `proposed` decision with both options. If a decision accepted on your branch contradicts one accepted on the main branch, turn yours back to `proposed` as that decision; until it is resolved, the main branch's version binds.
+- When the work on a step starts, set its `status` to `in-progress` and its `assignee` to the people doing the work (in the first commit of the work). Do a step with `stages` one stage at a time, each leaving the work in a working state (one commit each). Record progress in its log, one list entry per change or finished stage, starting with the date (`- YYYY-MM-DD: …`).
+- Keep raw material (recordings, transcripts, emails, PDFs, contracts, images) at its source: write to the brain what follows from it (decisions, knowledge, open questions) with a link to the source, never the material itself.
+- Do not put run instructions, commands, personal notes or personal data into the brain; commands go to the repository's `README.md` or outside the managed blocks of instruction files.
+- If the `dotbrain` CLI is available, run `dotbrain lint` before ending work that changed the brain, and fix what it reports.
+<!-- END:dotbrain -->
+-- AGENTS.md --
+# Notes API
+
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## The brain is the source of truth
+
+Source of truth for the Notes API: the service that stores notes for the Notes apps. The brain is in `.brain/`: decisions, knowledge and the plan of the work. If the brain and the work (code, process, documents outside the brain, this file included) disagree, the brain wins.
+
+- Start with `.brain/README.md`, the index of documents: scan the `description` of each document before reading whole documents, and read only what the task concerns.
+- Asked about the project, answer from the brain, link the documents the answer rests on, and say when the brain does not cover the question.
+- A decision is made in the brain first, then carried into the work. A change that departs from a document updates the document in the same change, for code in the same pull request.
+- Do not resolve decisions with `status: proposed`: prepare options and a recommendation if useful, and ask. Change their status only on the explicit instruction of the person who decides.
+- A decision found in a conversation, transcript, chat or email is recorded as `proposed` with its source, even if it was made there.
+- Rules with `apply: always` are in this block and apply to every task; rules with a glob apply when working with matching files.
+- Report any discrepancy between the brain and the work; do not leave it or fix it silently.
+- Keep to the scope and acceptance criteria of the step you work on; propose anything outside them. A new step is only written, with `status: draft`; a person sets it to `agreed`, and the work starts after that, on a separate instruction.
+
+## Working in the repository
+
+- Write to the brain in its language (`lang` in the manifest); talk to people in their language.
+- The languages of code, comments, commits, branch names and pull requests, and the order of work (brain changes with the work or before it), are decisions in the brain with `apply: always`; without them, ask before assuming.
+- Before committing a finished stage of a step and before setting a step to `done`, run the repository's checks and record in its log what was checked and how.
+- Before setting a step to `done`, merging a branch into the main branch or committing directly to it, review the change against the brain (the review procedure of the dotbrain specification) and report the discrepancies.
+
+## Rules for this brain
+
+### Languages of the work
+
+Code, identifiers, comments, log and error messages, commits, branch names and pull requests are in English. Documentation in the brain is in English, the language of the brain.
+
+Source: [decisions/process/2026-11-01-languages.md](.brain/decisions/process/2026-11-01-languages.md)
+
+### Brain changes with the work
+
+Changes to the brain (decisions, including `proposed` ones, steps, documents) go in the same pull request as the work that follows from them, in any of its commits, including the same commit as the work. The exception is a step: the commit that sets it to `agreed` comes before the work on it, and every finished stage is a separate commit. That pull request also carries the generated views and the managed blocks of instruction files that follow from the changed documents. A `proposed` decision or a new step that affects the work of other people may go to the main branch earlier in a separate small pull request.
+
+Source: [decisions/process/2026-11-01-order-of-work.md](.brain/decisions/process/2026-11-01-order-of-work.md)
+
+### Rule 0
+
+word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word
+
+Source: [decisions/process/2026-11-02-rule-00.md](.brain/decisions/process/2026-11-02-rule-00.md)
+
+### Rule 1
+
+Rule number 1.
+
+Source: [decisions/process/2026-11-02-rule-01.md](.brain/decisions/process/2026-11-02-rule-01.md)
+
+### Rule 2
+
+Rule number 2.
+
+Source: [decisions/process/2026-11-02-rule-02.md](.brain/decisions/process/2026-11-02-rule-02.md)
+
+### Rule 3
+
+Rule number 3.
+
+Source: [decisions/process/2026-11-02-rule-03.md](.brain/decisions/process/2026-11-02-rule-03.md)
+
+### Rule 4
+
+Rule number 4.
+
+Source: [decisions/process/2026-11-02-rule-04.md](.brain/decisions/process/2026-11-02-rule-04.md)
+
+### Rule 5
+
+Rule number 5.
+
+Source: [decisions/process/2026-11-02-rule-05.md](.brain/decisions/process/2026-11-02-rule-05.md)
+
+### Rule 6
+
+Rule number 6.
+
+Source: [decisions/process/2026-11-02-rule-06.md](.brain/decisions/process/2026-11-02-rule-06.md)
+
+### Rule 7
+
+Rule number 7.
+
+Source: [decisions/process/2026-11-02-rule-07.md](.brain/decisions/process/2026-11-02-rule-07.md)
+
+### Rule 8
+
+Rule number 8.
+
+Source: [decisions/process/2026-11-02-rule-08.md](.brain/decisions/process/2026-11-02-rule-08.md)
+
+### Rule 9
+
+Rule number 9.
+
+Source: [decisions/process/2026-11-02-rule-09.md](.brain/decisions/process/2026-11-02-rule-09.md)
+
+## Rules for specific files
+
+- `.brain/**`: [Work on the brain](.brain/AGENTS.md)
+- `src/notes/**`: [Soft delete of notes](.brain/decisions/api/2026-11-02-soft-delete.md)
+- `*.sql`: [Soft delete of notes](.brain/decisions/api/2026-11-02-soft-delete.md)
+
+Specification: [dotbrain 1.0.0](https://github.com/that-simple/dotbrain/blob/spec-v1.0.0/spec/README.md)
+<!-- END:dotbrain -->
+-- CLAUDE.md --
+# Notes API
+
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->
+
+## The brain is the source of truth
+
+Source of truth for the Notes API: the service that stores notes for the Notes apps. The brain is in `.brain/`: decisions, knowledge and the plan of the work. If the brain and the work (code, process, documents outside the brain, this file included) disagree, the brain wins.
+
+- Start with `.brain/README.md`, the index of documents: scan the `description` of each document before reading whole documents, and read only what the task concerns.
+- Asked about the project, answer from the brain, link the documents the answer rests on, and say when the brain does not cover the question.
+- A decision is made in the brain first, then carried into the work. A change that departs from a document updates the document in the same change, for code in the same pull request.
+- Do not resolve decisions with `status: proposed`: prepare options and a recommendation if useful, and ask. Change their status only on the explicit instruction of the person who decides.
+- A decision found in a conversation, transcript, chat or email is recorded as `proposed` with its source, even if it was made there.
+- Rules with `apply: always` are in this block and apply to every task; rules with a glob apply when working with matching files.
+- Report any discrepancy between the brain and the work; do not leave it or fix it silently.
+- Keep to the scope and acceptance criteria of the step you work on; propose anything outside them. A new step is only written, with `status: draft`; a person sets it to `agreed`, and the work starts after that, on a separate instruction.
+
+## Working in the repository
+
+- Write to the brain in its language (`lang` in the manifest); talk to people in their language.
+- The languages of code, comments, commits, branch names and pull requests, and the order of work (brain changes with the work or before it), are decisions in the brain with `apply: always`; without them, ask before assuming.
+- Before committing a finished stage of a step and before setting a step to `done`, run the repository's checks and record in its log what was checked and how.
+- Before setting a step to `done`, merging a branch into the main branch or committing directly to it, review the change against the brain (the review procedure of the dotbrain specification) and report the discrepancies.
+
+## Claude Code
+
+- Start writing a new step, and carrying out an `agreed` one, in plan mode. If the session is not in plan mode, enter it and present the plan; write the step or do the work only after the person accepts the plan. Accepting the plan does not agree the step: a new step is still written with `status: draft`.
+
+## Rules for this brain
+
+### Languages of the work
+
+Code, identifiers, comments, log and error messages, commits, branch names and pull requests are in English. Documentation in the brain is in English, the language of the brain.
+
+Source: [decisions/process/2026-11-01-languages.md](.brain/decisions/process/2026-11-01-languages.md)
+
+### Brain changes with the work
+
+Changes to the brain (decisions, including `proposed` ones, steps, documents) go in the same pull request as the work that follows from them, in any of its commits, including the same commit as the work. The exception is a step: the commit that sets it to `agreed` comes before the work on it, and every finished stage is a separate commit. That pull request also carries the generated views and the managed blocks of instruction files that follow from the changed documents. A `proposed` decision or a new step that affects the work of other people may go to the main branch earlier in a separate small pull request.
+
+Source: [decisions/process/2026-11-01-order-of-work.md](.brain/decisions/process/2026-11-01-order-of-work.md)
+
+### Rule 0
+
+word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word
+
+Source: [decisions/process/2026-11-02-rule-00.md](.brain/decisions/process/2026-11-02-rule-00.md)
+
+### Rule 1
+
+Rule number 1.
+
+Source: [decisions/process/2026-11-02-rule-01.md](.brain/decisions/process/2026-11-02-rule-01.md)
+
+### Rule 2
+
+Rule number 2.
+
+Source: [decisions/process/2026-11-02-rule-02.md](.brain/decisions/process/2026-11-02-rule-02.md)
+
+### Rule 3
+
+Rule number 3.
+
+Source: [decisions/process/2026-11-02-rule-03.md](.brain/decisions/process/2026-11-02-rule-03.md)
+
+### Rule 4
+
+Rule number 4.
+
+Source: [decisions/process/2026-11-02-rule-04.md](.brain/decisions/process/2026-11-02-rule-04.md)
+
+### Rule 5
+
+Rule number 5.
+
+Source: [decisions/process/2026-11-02-rule-05.md](.brain/decisions/process/2026-11-02-rule-05.md)
+
+### Rule 6
+
+Rule number 6.
+
+Source: [decisions/process/2026-11-02-rule-06.md](.brain/decisions/process/2026-11-02-rule-06.md)
+
+### Rule 7
+
+Rule number 7.
+
+Source: [decisions/process/2026-11-02-rule-07.md](.brain/decisions/process/2026-11-02-rule-07.md)
+
+### Rule 8
+
+Rule number 8.
+
+Source: [decisions/process/2026-11-02-rule-08.md](.brain/decisions/process/2026-11-02-rule-08.md)
+
+### Rule 9
+
+Rule number 9.
+
+Source: [decisions/process/2026-11-02-rule-09.md](.brain/decisions/process/2026-11-02-rule-09.md)
+
+## Rules for specific files
+
+- `src/notes/**`: [Soft delete of notes](.brain/decisions/api/2026-11-02-soft-delete.md)
+- `*.sql`: [Soft delete of notes](.brain/decisions/api/2026-11-02-soft-delete.md)
+
+Specification: [dotbrain 1.0.0](https://github.com/that-simple/dotbrain/blob/spec-v1.0.0/spec/README.md)
+<!-- END:dotbrain -->
+
+## Commands
+
+- `npm test` runs the tests.
+-- src/notes/delete.ts --
+export function deleteNote(id: string): void {
+  // sets deleted_at
+}

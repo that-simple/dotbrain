@@ -1,0 +1,37 @@
+The decision list, the index block and the status line of a step are missing, and a rule file of
+the brain for `AGENTS.md` is left over in a repository without `AGENTS.md`.
+V-VIEWS .brain/AGENTS.md
+V-VIEWS .brain/README.md
+V-VIEWS .brain/decisions/README.md
+V-VIEWS .brain/steps/01-first.md
+-- .brain/AGENTS.md --
+<!-- BEGIN:dotbrain 1.0.0 -->
+<!-- END:dotbrain -->
+-- .brain/README.md --
+---
+brain: example
+lang: en
+spec: 1.0.0
+description: "One sentence about what the brain covers."
+---
+# Example
+
+What this brain is about.
+-- .brain/steps/01-first.md --
+---
+status: draft
+description: "The first step."
+---
+# Step 01: first
+
+## Goal
+
+The first step.
+
+## Scope
+
+The first step.
+
+## Acceptance criteria
+
+1. Done.
