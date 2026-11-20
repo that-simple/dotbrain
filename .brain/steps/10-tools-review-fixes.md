@@ -1,11 +1,12 @@
 ---
-status: agreed
+status: in-progress
+assignee: [user:dkowcun]
 description: "`init` stops before writing anything when git ignores a file `index` must read, accepts every real date, and reports each out-of-date view once; a test covers each fix."
 ---
 # Step 10: fixes from the review of step 9
 
 <!-- BEGIN:dotbrain status -->
-Status: `agreed`
+Status: `in-progress` · Assignee: user:dkowcun
 <!-- END:dotbrain status -->
 
 A code review of the branch of [step 9](09-tools-code-quality.md), after the step was done, found faults in `init` and `lint`; step 9 records them in its log, and the owner asked for them to be fixed (conversation with the agent, 2026-11-20).
@@ -39,3 +40,7 @@ The faults found by the code review of step 9 are fixed, and the promise of stag
 2. `validDate` accepts `0050-01-01` and `2024-02-29` and rejects `2026-02-30`; `init --date=0050-01-01` writes a brain that passes `lint` and `index --check`; the test fails on the code before the fix.
 3. `init` prints each out-of-date view once.
 4. `npm run check` passes with `spec/conformance/` unchanged, and the output of the CLI in the cases of the log of step 9 is unchanged, apart from the cases above.
+
+## Log
+
+- 2026-11-20: Before writing anything, `scaffold` asks git, in one `git check-ignore` call, whether it ignores the files under `.brain/` it writes or the root instruction files, and stops with an error naming them and telling to change `.gitignore`; a file git tracks is not ignored, so a tracked `CLAUDE.md` that matches `.gitignore` still works. `validDate` sets the year with `setUTCFullYear`, so it accepts the years 0000–0099. `init` reports the out-of-date views only through `lint`. New tests: `init` with `.gitignore` listing `CLAUDE.md` and `.brain/` exits with code 2 and leaves the repository unchanged, and `init --date=0050-01-01` writes a valid brain; both failed on the code before the fix. Criterion 3 has no test, because `scaffold` leaves no view out of date; it is checked by reading `report` in `tools/src/init/cli.ts`, which no longer runs `index --check`. Checked: `npm run check` (51 tests including the test of the package, the conformance cases unchanged), `validDate` on `0050-01-01`, `2024-02-29`, `0000-02-29` (accepted), `2026-02-30` and `1900-02-29` (rejected), `init` in a repository where `.gitignore` lists a tracked `CLAUDE.md` (exit code 0), and the output of the CLI in the cases of the log of step 9 identical to the character with the state before the step.

@@ -45,7 +45,7 @@ The list of documents is generated from their `description` ([decision](decision
 - [07-lighter-entry.md](steps/07-lighter-entry.md): A lighter entry to dotbrain: the agent gets only the core of the contract in every task and the rules of work on the brain when it works on the brain, the contract has one normative text, and the framework is run through an agent with a person in the loop: the person reads steps, decisions and risks, the agent finds the rest and keeps the generated views. (`done`)
 - [08-publication.md](steps/08-publication.md): dotbrain 1.0 is public: the `that-simple/dotbrain` repository on GitHub with a squashed history and the tag `spec-v1.0.0`, and the package `@that-simple/dotbrain@1.0.0` on npm, with managed blocks linking to the published specification. (`done`)
 - [09-tools-code-quality.md](steps/09-tools-code-quality.md): The code of the tools has one checked style (Biome, four spaces), modules with one responsibility each, and the faults found in a review fixed, with the behavior of the CLI unchanged. (`done`)
-- [10-tools-review-fixes.md](steps/10-tools-review-fixes.md): `init` stops before writing anything when git ignores a file `index` must read, accepts every real date, and reports each out-of-date view once; a test covers each fix. (`agreed`)
+- [10-tools-review-fixes.md](steps/10-tools-review-fixes.md): `init` stops before writing anything when git ignores a file `index` must read, accepts every real date, and reports each out-of-date view once; a test covers each fix. (`in-progress`)
 <!-- END:dotbrain index -->
 
 ## Steps

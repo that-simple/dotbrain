@@ -207,10 +207,25 @@ test("a template that makes the skeleton invalid stops init before it writes any
     assert.deepEqual(snapshot(root), before);
 });
 
-test("init rejects a date that does not exist", () => {
-    const r = cli([repo(), "--date=2026-02-30", "--description=A.", "--yes"]);
-    assert.equal(r.status, 2);
-    assert.match(r.stderr, /"2026-02-30" is not a date YYYY-MM-DD/);
+test("init stops before writing anything when git ignores a file the tools must read", () => {
+    for (const ignore of ["CLAUDE.md", ".brain/"]) {
+        const root = repo({ ".gitignore": `${ignore}\n` });
+        const before = snapshot(root);
+        const r = cli([root, "--description=A.", "--yes"]);
+        assert.equal(r.status, 2, ignore);
+        assert.ok(r.stderr.includes(`git ignores ${ignore.replace(/\/$/, "")}`), r.stderr);
+        assert.deepEqual(snapshot(root), before, ignore);
+    }
+});
+
+test("init accepts every real date and rejects one that does not exist", () => {
+    const root = repo();
+    const r = cli([root, "--date=0050-01-01", "--description=A.", "--yes"]);
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assertValid(root);
+    const bad = cli([repo(), "--date=2026-02-30", "--description=A.", "--yes"]);
+    assert.equal(bad.status, 2);
+    assert.match(bad.stderr, /"2026-02-30" is not a date YYYY-MM-DD/);
 });
 
 test("a change to a template changes what init writes, without a change to the code", () => {

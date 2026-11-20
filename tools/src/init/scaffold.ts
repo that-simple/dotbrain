@@ -1,5 +1,5 @@
 // Writing the skeleton into a repository: the checks before writing, the files, the views and the warnings.
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { runIndex } from "../index.ts";
@@ -50,6 +50,15 @@ function ignored(root: string, path: string): boolean {
     }
 }
 
+/** The paths git ignores and does not track: the tools would not read them once written. */
+function ignoredByGit(root: string, paths: string[]): string[] {
+    const r = spawnSync("git", ["-C", root, "check-ignore", "-z", "--stdin"], {
+        input: paths.join("\0"),
+        encoding: "utf8",
+    });
+    return r.status === 0 ? r.stdout.split("\0").filter((p) => p !== "") : [];
+}
+
 export interface ScaffoldResult {
     written: string[];
     warnings: string[];
@@ -87,6 +96,14 @@ export function scaffold(root: string, answers: Answers, templates = TEMPLATES_D
     const first = new Map([...p.created].filter(([path]) => path !== SETUP_FILE));
     for (const file of ROOT_INSTRUCTION_FILES) {
         if (!existsSync(join(root, file))) first.set(file, `# ${answers.name}\n`);
+    }
+    // The tools do not read the files git ignores, so `index` would not see such a file once written.
+    const read = [...[...first.keys()].filter((p) => p.startsWith(".brain/")), ...ROOT_INSTRUCTION_FILES];
+    const ignoredFiles = ignoredByGit(root, read);
+    if (ignoredFiles.length) {
+        throw new InitError(
+            `git ignores ${ignoredFiles.join(", ")}; dotbrain does not read the files git ignores, so init would leave a brain without its views; change .gitignore`,
+        );
     }
     const planned = loadRepo(root, first);
     const tainted = evaluateViews(planned, checkDocuments(planned).violations).filter((r) => r.status === "tainted");

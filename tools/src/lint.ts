@@ -45,7 +45,9 @@ export function validDate(text: string | undefined): boolean {
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
     if (!m) return false;
     const [y, mo, d] = [Number(m[1]), Number(m[2]), Number(m[3])];
-    const date = new Date(Date.UTC(y, mo - 1, d));
+    // `Date.UTC` would read the years 0–99 as 1900–1999; `setUTCFullYear` takes the year as it is.
+    const date = new Date(0);
+    date.setUTCFullYear(y, mo - 1, d);
     return date.getUTCFullYear() === y && date.getUTCMonth() === mo - 1 && date.getUTCDate() === d;
 }
 
