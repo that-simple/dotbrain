@@ -5,6 +5,10 @@ description: "Decisions: Proposed, Accepted, Rejected, Superseded"
 
 <!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->
 
+## Proposed
+
+- [Code style of the tools](repository/2026-11-20-tools-code-style.md): The code of the tools is formatted and linted by Biome, a pinned devDependency run in `npm run check`: four-space indentation, lines up to 120 characters, the recommended lint rules.
+
 ## Accepted
 
 - [Agent contract](agents/2026-10-28-agent-contract.md): The core of the contract (the brain binds, decision before the work, open decisions are resolved by a person), extended with language, conflicts, content and work in a code repository. (2026-10-28)
