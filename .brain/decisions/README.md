@@ -5,6 +5,10 @@ description: "Decisions: Proposed, Accepted, Rejected, Superseded"
 
 <!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->
 
+## Proposed
+
+- [`README.md` commands without a version](tooling/2026-11-20-readme-commands-without-version.md): The `npx` commands in `README.md` run the latest version of the package, without a version; the `Stop` hook keeps the exact version, which `README.md` names for a setup without `init`.
+
 ## Accepted
 
 - [Agent contract](agents/2026-10-28-agent-contract.md): The core of the contract (the brain binds, decision before the work, open decisions are resolved by a person), extended with language, conflicts, content and work in a code repository. (2026-10-28)
