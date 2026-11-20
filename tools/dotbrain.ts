@@ -3,8 +3,8 @@
 // `index` generates the views (or, with --check, reports the out-of-date ones),
 // `init` sets up the skeleton of a brain in a code repository.
 import { resolve } from "node:path";
-import { lint, severity } from "./src/lint.ts";
-import { runIndex } from "./src/index.ts";
+import { formatViolation, lint, severity } from "./src/lint.ts";
+import { outOfDate, runIndex } from "./src/index.ts";
 import { runInit } from "./src/init/cli.ts";
 import { loadRepo } from "./src/repo.ts";
 
@@ -27,13 +27,13 @@ async function main(args: string[]): Promise<number> {
     const root = resolve(positional[0] ?? ".");
     if (command === "lint") {
         const result = lint(loadRepo(root));
-        for (const v of result.violations) console.log(`${severity(v.rule)} ${v.rule} ${v.path}: ${v.message}`);
+        for (const v of result.violations) console.log(formatViolation(v));
         for (const n of result.notes) console.error(`note: ${n}`);
         return result.violations.some((v) => severity(v.rule) === "error") ? 1 : 0;
     }
     if (command === "index") {
         const result = runIndex(root, { check });
-        for (const p of result.changed) console.log(check ? `error V-VIEWS ${p}: out of date` : `wrote ${p}`);
+        for (const p of result.changed) console.log(check ? formatViolation(outOfDate(p)) : `wrote ${p}`);
         for (const s of result.skipped) console.error(`skipped: ${s}`);
         for (const n of result.notes) console.error(`note: ${n}`);
         if (check && result.changed.length) return 1;

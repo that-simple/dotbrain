@@ -3,13 +3,15 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { runIndex } from "../index.ts";
-import { dirOf, ROOT_INSTRUCTION_FILES, relLink } from "../repo.ts";
+import { checkDocuments } from "../lint.ts";
+import { evaluateViews } from "../views/all-views.ts";
+import { dirOf, loadRepo, ROOT_INSTRUCTION_FILES, relLink } from "../repo.ts";
+import { MANAGED_END } from "../views/managed-block.ts";
 import { type Answers, InitError, QUESTIONS } from "./questions.ts";
 import {
     CLAUDE_SETTINGS,
     claudeSettings,
     fill,
-    MANAGED_END,
     plan,
     SETUP_FILE,
     setupFile,
@@ -80,16 +82,26 @@ export function scaffold(root: string, answers: Answers, templates = TEMPLATES_D
             throw new InitError(`${file} already has a managed block; init overwrites nothing`);
     }
 
+    // The files written before `index` runs. A template that makes them invalid would stop `index` from generating
+    // the views after the files are written, so they are checked in memory first.
+    const first = new Map([...p.created].filter(([path]) => path !== SETUP_FILE));
+    for (const file of ROOT_INSTRUCTION_FILES) {
+        if (!existsSync(join(root, file))) first.set(file, `# ${answers.name}\n`);
+    }
+    const planned = loadRepo(root, first);
+    const tainted = evaluateViews(planned, checkDocuments(planned).violations).filter((r) => r.status === "tainted");
+    if (tainted.length) {
+        const reasons = tainted.map((r) => `the ${r.view.name} of ${r.view.path} (${r.reason})`);
+        throw new InitError(`the templates give a skeleton whose views cannot be generated: ${reasons.join("; ")}`);
+    }
+
     const written = new Set<string>();
     const write = (path: string, content: string) => {
         mkdirSync(dirname(join(root, path)), { recursive: true });
         writeFileSync(join(root, path), content);
         written.add(path);
     };
-    for (const [path, content] of p.created) if (path !== SETUP_FILE) write(path, content);
-    for (const file of ROOT_INSTRUCTION_FILES) {
-        if (!existsSync(join(root, file))) write(file, `# ${answers.name}\n`);
-    }
+    for (const [path, content] of first) write(path, content);
     const index = runIndex(root, { check: false });
     if (index.skipped.length) throw new InitError(`the views were not generated: ${index.skipped.join("; ")}`);
     for (const path of index.changed) written.add(path);

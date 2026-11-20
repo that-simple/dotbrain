@@ -170,10 +170,14 @@ export function isAdapterFile(rel: string): boolean {
     return parts.slice(0, -1).some((p) => p === ".github" || p === ".claude");
 }
 
-export function loadRepo(root: string): Repo {
-    const files = listFiles(root);
+/**
+ * Loads a repository. The `overlay` adds files, or replaces their content, as if they were written:
+ * a check of what would be written, before writing it.
+ */
+export function loadRepo(root: string, overlay: ReadonlyMap<string, string> = new Map()): Repo {
+    const files = [...new Set([...listFiles(root), ...overlay.keys()])].sort(compareCodePoints);
     const fileSet = new Set(files);
-    const cache = new Map<string, string>();
+    const cache = new Map<string, string>(overlay);
     const read = (path: string): string | null => {
         if (!fileSet.has(path)) return null;
         if (!cache.has(path)) cache.set(path, readFileSync(join(root, path), "utf8"));
@@ -182,6 +186,7 @@ export function loadRepo(root: string): Repo {
     const exists = (path: string): boolean => {
         if (path === "") return true;
         if (path.split("/").includes("..")) return false;
+        if (overlay.has(path) || [...overlay.keys()].some((f) => f.startsWith(`${path}/`))) return true;
         try {
             statSync(join(root, path));
             return true;

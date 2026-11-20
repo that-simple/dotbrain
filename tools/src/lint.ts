@@ -11,8 +11,7 @@ import {
     type Repo,
 } from "./repo.ts";
 import { applyValue, effectiveRules, wordCount, ruleText } from "./rules.ts";
-import { allViews, TAINTING_RULES } from "./views/all-views.ts";
-import type { View } from "./views/view.ts";
+import { evaluateViews } from "./views/all-views.ts";
 
 export type Severity = "error" | "warning";
 
@@ -55,11 +54,21 @@ export interface LintResult {
     notes: string[];
 }
 
+/** Every validity rule: the documents of the brain, then the generated views. */
 export function lint(repo: Repo): LintResult {
+    const documents = checkDocuments(repo);
+    const views = checkViews(repo, documents.violations);
+    return {
+        violations: dedupe([...documents.violations, ...views.violations]),
+        notes: [...documents.notes, ...views.notes],
+    };
+}
+
+/** The validity rules of the documents of the brain: every rule except `V-VIEWS`. */
+export function checkDocuments(repo: Repo): LintResult {
     const v: Violation[] = [];
     const notes: string[] = [];
     const add = (rule: string, path: string, message: string) => v.push({ rule, path, message });
-
     if (repo.brain === null) {
         notes.push("no brain found: the repository has no .brain/README.md");
     } else {
@@ -67,11 +76,12 @@ export function lint(repo: Repo): LintResult {
         checkBrain(repo, repo.brain, add);
         checkBudget(repo, repo.brain, add);
     }
-
-    const result = checkViews(repo, v);
-    v.push(...result.violations);
-    notes.push(...result.notes);
     return { violations: dedupe(v), notes };
+}
+
+/** The line of a violation in the output of the CLI: `<severity> <rule> <path>: <message>`. */
+export function formatViolation(v: Violation): string {
+    return `${severity(v.rule)} ${v.rule} ${v.path}: ${v.message}`;
 }
 
 function dedupe(v: Violation[]): Violation[] {
@@ -254,29 +264,6 @@ function checkBudget(repo: Repo, brain: Brain, add: Add) {
         const words = wordCount(ruleText(r, ""));
         if (words > 150) add("V-BUDGET", r.doc.path, `the rule has ${words} words (at most 150)`);
     }
-}
-
-export interface ViewResult {
-    view: View;
-    status: "up-to-date" | "stale" | "tainted";
-    reason?: string;
-}
-
-export function evaluateViews(repo: Repo, violations: Violation[]): ViewResult[] {
-    const readme = repo.brain?.readme.path;
-    const tainted = (view: View): string | null => {
-        for (const input of view.inputs) {
-            const rules = input === readme ? ["V-MANIFEST"] : TAINTING_RULES;
-            const hit = violations.find((x) => x.path === input && rules.includes(x.rule));
-            if (hit) return `${hit.rule} ${hit.path}`;
-        }
-        return null;
-    };
-    return allViews(repo).map((view) => {
-        const t = tainted(view);
-        if (t) return { view, status: "tainted", reason: t };
-        return { view, status: view.upToDate(repo.read(view.path)) ? "up-to-date" : "stale" };
-    });
 }
 
 function checkViews(repo: Repo, violations: Violation[]): { violations: Violation[]; notes: string[] } {

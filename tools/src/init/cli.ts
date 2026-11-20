@@ -5,8 +5,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createInterface } from "node:readline";
-import { runIndex } from "../index.ts";
-import { lint, severity } from "../lint.ts";
+import { outOfDate, runIndex } from "../index.ts";
+import { formatViolation, lint, severity } from "../lint.ts";
 import { loadRepo } from "../repo.ts";
 import { type Answers, InitError, type Question, QUESTION_KEYS, QUESTIONS } from "./questions.ts";
 import { preflight, type ScaffoldResult, scaffold } from "./scaffold.ts";
@@ -161,9 +161,9 @@ function report(root: string, result: ScaffoldResult): number {
     for (const w of result.warnings) console.error(`warning: ${w}`);
     for (const n of result.notes) console.error(`note: ${n}`);
     const violations = lint(loadRepo(root)).violations;
-    for (const v of violations) console.log(`${severity(v.rule)} ${v.rule} ${v.path}: ${v.message}`);
+    for (const v of violations) console.log(formatViolation(v));
     const stale = runIndex(root, { check: true }).changed;
-    for (const s of stale) console.log(`error V-VIEWS ${s}: out of date`);
+    for (const s of stale) console.log(formatViolation(outOfDate(s)));
     if (violations.some((v) => severity(v.rule) === "error") || stale.length) return 1;
     console.log(
         `\nThe skeleton of the brain is ready and valid. Open your AI agent in ${root} and tell it:\n\n  ${result.prompt}\n`,

@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { isRelativeTarget, splitFrontmatter } from "../markdown.ts";
 import { str } from "../repo.ts";
+import { MANAGED_END } from "../views/managed-block.ts";
 import { type Answers, InitError } from "./questions.ts";
 
 export const TEMPLATES_DIR = fileURLToPath(new URL("../../../templates/", import.meta.url));
@@ -14,7 +15,6 @@ export const CLAUDE_SETTINGS = ".claude/settings.json";
 export const PACKAGE_VERSION: string = JSON.parse(
     readFileSync(fileURLToPath(new URL("../../../package.json", import.meta.url)), "utf8"),
 ).version;
-export const MANAGED_END = "<!-- END:dotbrain -->";
 
 interface Plan {
     /** Files written by init, which must not exist yet. */

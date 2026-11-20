@@ -1,4 +1,5 @@
 // Every generated view of a repository, in the order `index` writes them.
+import type { Violation } from "../lint.ts";
 import { ROOT_INSTRUCTION_FILES, type Repo } from "../repo.ts";
 import { effectiveRules } from "../rules.ts";
 import { decisionListView } from "./decision-list.ts";
@@ -21,4 +22,28 @@ export function allViews(repo: Repo): View[] {
     }
     views.push(...ruleFileViews(repo, brain));
     return views;
+}
+
+export interface ViewResult {
+    view: View;
+    status: "up-to-date" | "stale" | "tainted";
+    reason?: string;
+}
+
+/** Each view, up to date, stale, or tainted: not generated or checked while an input breaks a tainting rule. */
+export function evaluateViews(repo: Repo, violations: Violation[]): ViewResult[] {
+    const readme = repo.brain?.readme.path;
+    const tainted = (view: View): string | null => {
+        for (const input of view.inputs) {
+            const rules = input === readme ? ["V-MANIFEST"] : TAINTING_RULES;
+            const hit = violations.find((x) => x.path === input && rules.includes(x.rule));
+            if (hit) return `${hit.rule} ${hit.path}`;
+        }
+        return null;
+    };
+    return allViews(repo).map((view) => {
+        const t = tainted(view);
+        if (t) return { view, status: "tainted", reason: t };
+        return { view, status: view.upToDate(repo.read(view.path)) ? "up-to-date" : "stale" };
+    });
 }

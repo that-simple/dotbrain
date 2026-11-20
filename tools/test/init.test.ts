@@ -196,6 +196,23 @@ test("answers without questions are checked, and declining the summary writes no
     assert.deepEqual([...snapshot(root).keys()], []);
 });
 
+test("a template that makes the skeleton invalid stops init before it writes anything", () => {
+    const templates = join(tempDir(), "templates");
+    cpSync(TEMPLATES_DIR, templates, { recursive: true });
+    const file = join(templates, "languages.md");
+    writeFileSync(file, readFileSync(file, "utf8").replace("## Decision\n", ""));
+    const root = repo({ "CLAUDE.md": "# Notes API\n" });
+    const before = snapshot(root);
+    assert.throws(() => scaffold(root, ANSWERS, templates), /languages\.md/);
+    assert.deepEqual(snapshot(root), before);
+});
+
+test("init rejects a date that does not exist", () => {
+    const r = cli([repo(), "--date=2026-02-30", "--description=A.", "--yes"]);
+    assert.equal(r.status, 2);
+    assert.match(r.stderr, /"2026-02-30" is not a date YYYY-MM-DD/);
+});
+
 test("a change to a template changes what init writes, without a change to the code", () => {
     const templates = join(tempDir(), "templates");
     cpSync(TEMPLATES_DIR, templates, { recursive: true });

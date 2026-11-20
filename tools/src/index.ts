@@ -1,6 +1,7 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { evaluateViews, lint, type Violation } from "./lint.ts";
+import { checkDocuments, type Violation } from "./lint.ts";
+import { evaluateViews } from "./views/all-views.ts";
 import { loadRepo } from "./repo.ts";
 
 export interface IndexResult {
@@ -11,9 +12,14 @@ export interface IndexResult {
     notes: string[];
 }
 
+/** The violation `index --check` reports for a view that is out of date. */
+export function outOfDate(path: string): Violation {
+    return { rule: "V-VIEWS", path, message: "out of date" };
+}
+
 export function runIndex(root: string, options: { check: boolean }): IndexResult {
     const repo = loadRepo(root);
-    const violations: Violation[] = lint(repo).violations.filter((v) => v.rule !== "V-VIEWS");
+    const violations = checkDocuments(repo).violations;
     const result: IndexResult = { changed: [], skipped: [], notes: [] };
     for (const r of evaluateViews(repo, violations)) {
         if (r.status === "tainted") {

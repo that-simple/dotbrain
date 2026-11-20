@@ -1,7 +1,7 @@
 // The questions of `init`: what the wizard asks, the default answers and the check of each answer.
 import { execFileSync } from "node:child_process";
 import { basename, resolve } from "node:path";
-import { BCP47, KEBAB } from "../lint.ts";
+import { BCP47, KEBAB, validDate } from "../lint.ts";
 
 export class InitError extends Error {}
 
@@ -105,12 +105,8 @@ export const QUESTIONS: Question[] = [
         prompt: "Date of the first decisions (YYYY-MM-DD)",
         asked: false,
         default: () => today(),
-        check: (v) =>
-            /^\d{4}-\d{2}-\d{2}$/.test(v) &&
-            !Number.isNaN(Date.parse(`${v}T00:00:00Z`)) &&
-            new Date(`${v}T00:00:00Z`).toISOString().startsWith(v)
-                ? null
-                : `"${v}" is not a date YYYY-MM-DD`,
+        // The same rule `lint` applies to the `decided` date the answer goes into.
+        check: (v) => (validDate(v) ? null : `"${v}" is not a date YYYY-MM-DD`),
     },
 ];
 
