@@ -92,7 +92,7 @@ test("the installed package has the dotbrain command and no runtime dependencies
     assert.equal(pkg.name, "@that-simple/dotbrain");
     assert.equal(pkg.dependencies, undefined);
     const r = dotbrain(["help"]);
-    assert.match(r.stderr, /^Usage:\n  dotbrain lint/);
+    assert.match(r.stderr, /^Usage:\n {2}dotbrain lint/);
 });
 
 for (const [kind, code] of [

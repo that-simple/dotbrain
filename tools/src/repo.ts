@@ -204,7 +204,7 @@ export function loadRepo(root: string): Repo {
     const brainFiles: string[] = [];
     const docs: Document[] = [];
     for (const f of files) {
-        if (!f.startsWith(BRAIN_DIR + "/")) continue;
+        if (!f.startsWith(`${BRAIN_DIR}/`)) continue;
         const rel = f.slice(BRAIN_DIR.length + 1);
         if (isAdapterFile(rel)) continue;
         brainFiles.push(f);

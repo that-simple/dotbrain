@@ -30,7 +30,7 @@
         "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
         "prepack": "npm run build",
         "format": "biome format --write",
-        "check": "biome check && tsc && node tools/dotbrain.ts lint && node tools/dotbrain.ts index --check && node tools/conformance/build-cases.ts --check && node --test 'tools/test/*.test.ts'",
+        "check": "biome check --error-on-warnings && tsc && node tools/dotbrain.ts lint && node tools/dotbrain.ts index --check && node tools/conformance/build-cases.ts --check && node --test 'tools/test/*.test.ts'",
         "build-cases": "node tools/conformance/build-cases.ts"
     },
     "devDependencies": {

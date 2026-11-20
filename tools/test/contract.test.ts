@@ -24,7 +24,7 @@ function numbers(cell: string): number[] {
 }
 
 test("every rule of the contract is in exactly one part of the compact form", () => {
-    const contract = readFileSync(SPEC + "agent-contract.md", "utf8");
+    const contract = readFileSync(`${SPEC}agent-contract.md`, "utf8");
     const rules = [...contract.matchAll(/^(\d+)\. \*\*/gm)].map((m) => Number(m[1]));
     assert.deepEqual(
         rules,
@@ -32,7 +32,7 @@ test("every rule of the contract is in exactly one part of the compact form", ()
         "rules are numbered 1…N",
     );
 
-    const agents = readFileSync(SPEC + "adapters/agents.md", "utf8");
+    const agents = readFileSync(`${SPEC}adapters/agents.md`, "utf8");
     const parts = new Map<string, number[]>();
     for (const m of agents.matchAll(/^\| (Core|Work on the brain) \| ([\d,–\- ]+) \|$/gm))
         parts.set(m[1]!, numbers(m[2]!));

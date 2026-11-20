@@ -72,7 +72,7 @@ function build(c: CaseSpec): string {
         const expected = [...(c.expected ?? [])]
             .sort((a, b) => compareCodePoints(a[0], b[0]) || compareCodePoints(a[1], b[1]))
             .map(([rule, path]) => `${rule} ${path}`);
-        let text = [...c.description.trim().split("\n"), ...expected].join("\n") + "\n";
+        let text = [...c.description.trim().split("\n"), ...expected, ""].join("\n");
         for (const path of [...tree.keys()].sort(compareCodePoints)) {
             const content = tree.get(path)!;
             if (content !== "" && !content.endsWith("\n"))
@@ -164,7 +164,7 @@ function accepted(title: string, desc: string, decision: string, o: AcceptedOpti
     fm += `description: "${desc}"\n---\n`;
     let body = `# ${title}\n\n`;
     if (o.context) body += `## ${labels.context}\n\n${o.context}\n\n`;
-    return fm + body + `## ${labels.decision}\n\n${decision}\n`;
+    return `${fm}${body}## ${labels.decision}\n\n${decision}\n`;
 }
 
 const LANGUAGES_EN = accepted(
@@ -303,8 +303,8 @@ function step(
     if (o.assignee) fm += `assignee: [${o.assignee}]\n`;
     fm += `description: "${desc}"\n---\n`;
     let body = `# ${L.step} ${num}: ${title}\n\n## ${L.goal}\n\n${goal}\n\n## ${L.scope}\n\n${scope}\n\n## ${L.acceptance}\n\n`;
-    body += criteria.map((c, i) => `${i + 1}. ${c}`).join("\n") + "\n";
-    if (o.log) body += `\n## ${L.log}\n\n` + o.log.join("\n") + "\n";
+    body += `${criteria.map((c, i) => `${i + 1}. ${c}`).join("\n")}\n`;
+    if (o.log) body += `\n## ${L.log}\n\n${o.log.join("\n")}\n`;
     return fm + body;
 }
 
@@ -699,7 +699,7 @@ built from them, so it is not compared until they are fixed.`,
             description: "A document with two H1 headings, and one whose first heading is not the title.",
             files: enProject(),
             beforeIndex: {
-                ".brain/risks.md": RISKS_EN + "\n# More risks\n",
+                ".brain/risks.md": `${RISKS_EN}\n# More risks\n`,
                 ".brain/roadmap.md": replaced(ROADMAP_EN, ["# Roadmap\n", "## Phases\n\n# Roadmap\n"]),
             },
             expected: [

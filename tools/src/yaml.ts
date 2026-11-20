@@ -51,7 +51,7 @@ function stripComment(raw: string): string {
             }
         } else if (c === '"' || c === "'") {
             const before = raw.slice(0, i).trimEnd();
-            if (before === "" || /[:\-\[,]$/.test(before)) quote = c;
+            if (before === "" || /[:\-[,]$/.test(before)) quote = c;
         } else if (c === "#" && (i === 0 || raw[i - 1] === " ")) {
             return raw.slice(0, i);
         }
@@ -74,7 +74,7 @@ function parseSequence(lines: Line[], state: { pos: number }, indent: number): Y
         if (!(line.text === "-" || line.text.startsWith("- "))) break;
         const rest = line.text.slice(1).trim();
         if (rest === "") throw new YamlError(`line ${line.number}: nested sequence items are not supported`);
-        if (/^[^"'\[][^:]*:(\s|$)/.test(rest)) {
+        if (/^[^"'[][^:]*:(\s|$)/.test(rest)) {
             throw new YamlError(`line ${line.number}: mappings in sequences are not supported`);
         }
         items.push(parseScalarOrFlow(rest, line.number));
@@ -89,7 +89,7 @@ function parseMapping(lines: Line[], state: { pos: number }, indent: number): Ya
         const line = lines[state.pos]!;
         if (line.indent < indent) break;
         if (line.indent > indent) throw new YamlError(`line ${line.number}: unexpected indentation`);
-        const m = /^([A-Za-z0-9_][A-Za-z0-9_.\-]*|"[^"]*"|'[^']*'):(?:\s+(.*))?$/.exec(line.text);
+        const m = /^([A-Za-z0-9_][A-Za-z0-9_.-]*|"[^"]*"|'[^']*'):(?:\s+(.*))?$/.exec(line.text);
         if (!m) throw new YamlError(`line ${line.number}: expected "key: value"`);
         let key = m[1]!;
         if (key.startsWith('"') || key.startsWith("'")) key = key.slice(1, -1);

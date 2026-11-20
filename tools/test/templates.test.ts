@@ -9,7 +9,7 @@ import { brainWorkForm, compactForm } from "../src/contract.ts";
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 
 test("the managed block of the starter follows the specification", () => {
-    const template = readFileSync(ROOT + "templates/managed-block.md", "utf8");
+    const template = readFileSync(`${ROOT}templates/managed-block.md`, "utf8");
     const expected = [
         "<!-- BEGIN:dotbrain 1.0.0 -->",
         "<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->",
@@ -24,7 +24,7 @@ test("the managed block of the starter follows the specification", () => {
 });
 
 test("the rule file of the brain of the starter follows the specification", () => {
-    const template = readFileSync(ROOT + "templates/brain-rules.md", "utf8");
+    const template = readFileSync(`${ROOT}templates/brain-rules.md`, "utf8");
     const expected = [
         "<!-- BEGIN:dotbrain 1.0.0 -->",
         "<!-- Managed block: generated from the agent contract and the brain. Do not edit by hand; change the brain and regenerate. Text outside this block must not contradict the brain. -->",
@@ -37,7 +37,7 @@ test("the rule file of the brain of the starter follows the specification", () =
 });
 
 test("the Claude Code settings of the starter are JSON with a Stop hook running lint from the package of an exact version", () => {
-    const settings = JSON.parse(readFileSync(ROOT + "templates/claude-settings.json", "utf8"));
+    const settings = JSON.parse(readFileSync(`${ROOT}templates/claude-settings.json`, "utf8"));
     const commands = settings.hooks.Stop.flatMap((e: { hooks: { command: string }[] }) =>
         e.hooks.map((h) => h.command),
     );

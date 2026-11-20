@@ -33,7 +33,7 @@ let cache: { core: string; brainWork: string; tools: Record<string, string> } | 
 
 function load() {
     if (cache) return cache;
-    const agents = readFileSync(SPEC_DIR + "adapters/agents.md", "utf8");
+    const agents = readFileSync(`${SPEC_DIR}adapters/agents.md`, "utf8");
     const [core, brainWork] = fences(agents, "## Compact form");
     if (!core || !brainWork) throw new Error("specification: the two parts of the compact form not found");
     const [claude] = fences(agents, "## Tool add-ons");

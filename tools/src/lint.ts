@@ -133,7 +133,7 @@ function checkBrain(repo: Repo, brain: Brain, add: Add) {
     const decisionIds = new Map<string, Document[]>();
     const stepIds = new Map<string, Document[]>();
     for (const doc of brain.docs) {
-        checkDocument(repo, brain, doc, add);
+        checkDocument(repo, doc, add);
         if (doc.rel.startsWith("decisions/") && doc.rel !== "decisions/README.md") {
             const name = posix.basename(doc.rel);
             const m = DECISION_NAME.exec(name);
@@ -168,7 +168,7 @@ function checkBrain(repo: Repo, brain: Brain, add: Add) {
     }
 }
 
-function checkDocument(repo: Repo, brain: Brain, doc: Document, add: Add) {
+function checkDocument(repo: Repo, doc: Document, add: Add) {
     if (!doc.hasFrontmatter) add("V-FRONTMATTER", doc.path, "the document has no frontmatter");
     else if (doc.frontmatterError)
         add("V-FRONTMATTER", doc.path, `the frontmatter cannot be read: ${doc.frontmatterError}`);

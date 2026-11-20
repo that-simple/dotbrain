@@ -67,7 +67,7 @@ test("in an empty repository the skeleton is valid and points the agent to the s
         assert.ok(files.has(p), p);
     assert.match(
         files.get(".claude/rules/notes-api.md")!,
-        /^---\npaths:\n  - "\.brain\/\*\*"\n---\n<!-- BEGIN:dotbrain 1\.0\.0 -->[\s\S]*## Work on the brain/,
+        /^---\npaths:\n {2}- "\.brain\/\*\*"\n---\n<!-- BEGIN:dotbrain 1\.0\.0 -->[\s\S]*## Work on the brain/,
     );
     assert.match(files.get(".brain/AGENTS.md")!, /^<!-- BEGIN:dotbrain 1\.0\.0 -->[\s\S]*## Work on the brain/);
     assert.match(files.get(".github/instructions/notes-api.instructions.md")!, /^---\napplyTo: "\.brain\/\*\*"\n---\n/);
@@ -116,7 +116,7 @@ test("ticket keys, the order of work before the work and a brain in Polish give 
     assert.match(order, /# Brain changes before the work/);
     const readme = readFileSync(join(root, ".brain/README.md"), "utf8");
     assert.match(readme, /^owner: "Zespół \\"API\\""$/m);
-    assert.match(readme, /^sections:\n  goal: Goal\n/m);
+    assert.match(readme, /^sections:\n {2}goal: Goal\n/m);
     for (const f of INSTRUCTION_FILES)
         assert.match(readFileSync(join(root, f), "utf8"), /### Steps named by ticket keys/);
 });
@@ -155,10 +155,19 @@ test("in an existing CLAUDE.md the block goes after the first heading and the re
 
 test("the wizard asks one question at a time, rejects a wrong answer with its reason and writes what the answers file writes", () => {
     const asked = repo();
-    const input =
-        ["Notes API", "notes-api", "", "", "A notes API for small teams.", "", "later", "with-the-work", "", "y"].join(
-            "\n",
-        ) + "\n";
+    const typed = [
+        "Notes API",
+        "notes-api",
+        "",
+        "",
+        "A notes API for small teams.",
+        "",
+        "later",
+        "with-the-work",
+        "",
+        "y",
+    ];
+    const input = `${typed.join("\n")}\n`;
     const r = cli([asked, "--date=2026-11-12"], input);
     assert.equal(r.status, 0, r.stderr);
     const prompts = QUESTIONS.filter((q) => q.asked).map((q) => q.prompt);
@@ -170,7 +179,7 @@ test("the wizard asks one question at a time, rejects a wrong answer with its re
     }
     assert.match(r.stdout, /"Notes API" is not lowercase kebab-case/);
     assert.match(r.stdout, /answer one of: with-the-work, before-the-work/);
-    assert.match(r.stdout, /Summary:\n  name: notes-api\n  lang: en\n  owner: Ana Example\n/);
+    assert.match(r.stdout, /Summary:\n {2}name: notes-api\n {2}lang: en\n {2}owner: Ana Example\n/);
     assert.ok(r.stdout.indexOf("Summary:") < r.stdout.indexOf("wrote "), "the summary comes before writing");
 
     const given = repo();

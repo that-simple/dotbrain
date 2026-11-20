@@ -86,7 +86,7 @@ export function generateDecisionList(brain: Brain): string {
             out.push(line);
         }
     }
-    return out.join("\n") + "\n";
+    return `${out.join("\n")}\n`;
 }
 
 // ---------------------------------------------------------------- index block
@@ -285,7 +285,7 @@ function managedBlockView(repo: Repo, served: Brain, file: string, inputs: strin
         inputs,
         upToDate: (actual) => {
             const c = current(actual);
-            if (!c || !c.block) return false;
+            if (!c?.block) return false;
             return c.block.join("\n") === expected;
         },
         desired: (actual) => {
@@ -350,7 +350,7 @@ function brainRuleFileView(served: Brain, path: string, frontmatter: string, inp
 }
 
 function containsManagedBlock(text: string | null): boolean {
-    return text !== null && text.split("\n").some((l) => MANAGED_BEGIN.test(l));
+    return (text ?? "").split("\n").some((line) => MANAGED_BEGIN.test(line));
 }
 
 function staleView(path: string): View {
@@ -433,7 +433,7 @@ export function allViews(repo: Repo): View[] {
             brainFile: `${brain.name}.md`,
             brainFm: `---\npaths:\n  - "${brain.dir}/**"\n---\n`,
             name: (r) => `${brain.name}-${posix.basename(r.doc.rel, ".md")}.md`,
-            fm: (gs) => `---\npaths:\n${gs.map((x) => `  - "${x.includes("/") ? x : "/" + x}"`).join("\n")}\n---\n`,
+            fm: (gs) => `---\npaths:\n${gs.map((x) => `  - "${x.includes("/") ? x : `/${x}`}"`).join("\n")}\n---\n`,
         },
         {
             enabled: repo.read(".github/copilot-instructions.md") !== null,

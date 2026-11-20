@@ -16,7 +16,7 @@ export function parseTxtar(text: string): Case {
     const result: Case = { description: [], expected: [], files: [] };
     let current: { path: string; lines: string[] } | null = null;
     const close = () => {
-        if (current) result.files.push({ path: current.path, content: current.lines.map((l) => l + "\n").join("") });
+        if (current) result.files.push({ path: current.path, content: current.lines.map((l) => `${l}\n`).join("") });
     };
     for (const line of lines) {
         const m = MARKER.exec(line);

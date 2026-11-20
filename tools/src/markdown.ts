@@ -101,7 +101,7 @@ export function bodyWithoutTitle(body: string): string {
 }
 
 const INLINE_LINK =
-    /(!?\[(?:[^\[\]\\]|\\.|\[[^\]]*\])*\]\()(<[^>]*>|[^()\s]*(?:\([^()\s]*\)[^()\s]*)*)((?:\s+(?:"[^"]*"|'[^']*'))?\))/g;
+    /(!?\[(?:[^[\]\\]|\\.|\[[^\]]*\])*\]\()(<[^>]*>|[^()\s]*(?:\([^()\s]*\)[^()\s]*)*)((?:\s+(?:"[^"]*"|'[^']*'))?\))/g;
 
 /**
  * Applies `fn` to the target of every inline link outside code (fenced blocks, code spans)
@@ -110,26 +110,12 @@ const INLINE_LINK =
 export function mapLinks(text: string, fn: (target: string) => string): string {
     const lines = text.split("\n");
     const fenced = fencedLines(lines);
-    let inComment = false;
-    return lines
-        .map((line, i) => {
-            if (fenced[i]) return line;
-            return mapLine(
-                line,
-                fn,
-                (v) => (inComment = v),
-                () => inComment,
-            );
-        })
-        .join("\n");
+    // An HTML comment may span lines, so the state is carried from one line to the next.
+    const state = { inComment: false };
+    return lines.map((line, i) => (fenced[i] ? line : mapLine(line, fn, state))).join("\n");
 }
 
-function mapLine(
-    line: string,
-    fn: (target: string) => string,
-    setComment: (v: boolean) => void,
-    getComment: () => boolean,
-): string {
+function mapLine(line: string, fn: (target: string) => string, state: { inComment: boolean }): string {
     let out = "";
     let i = 0;
     let plain = "";
@@ -142,7 +128,7 @@ function mapLine(
         plain = "";
     };
     while (i < line.length) {
-        if (getComment()) {
+        if (state.inComment) {
             const end = line.indexOf("-->", i);
             if (end === -1) {
                 out += line.slice(i);
@@ -150,12 +136,12 @@ function mapLine(
             }
             out += line.slice(i, end + 3);
             i = end + 3;
-            setComment(false);
+            state.inComment = false;
             continue;
         }
         if (line.startsWith("<!--", i)) {
             flush();
-            setComment(true);
+            state.inComment = true;
             continue;
         }
         if (line[i] === "`") {
@@ -197,6 +183,6 @@ export function linkTargets(text: string): string[] {
 
 export function isRelativeTarget(target: string): boolean {
     if (target === "" || target.startsWith("#") || target.startsWith("/")) return false;
-    if (/^[a-zA-Z][a-zA-Z0-9+.\-]*:/.test(target)) return false;
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(target)) return false;
     return true;
 }
