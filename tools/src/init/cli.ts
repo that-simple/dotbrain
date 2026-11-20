@@ -155,7 +155,7 @@ async function wizard(root: string, answers: Answers): Promise<number | null> {
 }
 
 /** Prints what was written and checks the result with `lint`, which also reports out-of-date views. */
-function report(root: string, result: ScaffoldResult): number {
+export function report(root: string, result: ScaffoldResult): number {
     for (const p of result.written) console.log(`wrote ${p}`);
     for (const w of result.warnings) console.error(`warning: ${w}`);
     for (const n of result.notes) console.error(`note: ${n}`);

@@ -50,13 +50,19 @@ function ignored(root: string, path: string): boolean {
     }
 }
 
-/** The paths git ignores and does not track: the tools would not read them once written. */
+/**
+ * The paths git ignores and does not track: the tools would not read them once written. When git cannot tell,
+ * init stops, because it could not keep its promise to change nothing when a check fails.
+ */
 function ignoredByGit(root: string, paths: string[]): string[] {
     const r = spawnSync("git", ["-C", root, "check-ignore", "-z", "--stdin"], {
         input: paths.join("\0"),
         encoding: "utf8",
     });
-    return r.status === 0 ? r.stdout.split("\0").filter((p) => p !== "") : [];
+    if (r.status === 0) return r.stdout.split("\0").filter((p) => p !== "");
+    if (r.status === 1) return [];
+    const reason = (r.stderr ?? "").split("\n")[0]?.trim() || (r.error?.message ?? `exit code ${r.status}`);
+    throw new InitError(`git check-ignore failed: ${reason}; init changes nothing`);
 }
 
 export interface ScaffoldResult {

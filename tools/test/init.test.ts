@@ -3,9 +3,10 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { cpSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { afterEach, test } from "node:test";
+import { afterEach, mock, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { runIndex } from "../src/index.ts";
+import { report } from "../src/init/cli.ts";
 import { type Answers, InitError, QUESTIONS } from "../src/init/questions.ts";
 import { scaffold } from "../src/init/scaffold.ts";
 import { CLAUDE_SETTINGS, PACKAGE_VERSION, SETUP_FILE, TEMPLATES_DIR } from "../src/init/skeleton.ts";
@@ -216,6 +217,37 @@ test("init stops before writing anything when git ignores a file the tools must 
         assert.ok(r.stderr.includes(`git ignores ${ignore.replace(/\/$/, "")}`), r.stderr);
         assert.deepEqual(snapshot(root), before, ignore);
     }
+});
+
+test("init stops before writing anything when git cannot tell which files it ignores", () => {
+    const root = repo();
+    writeFileSync(join(root, ".git/index"), "garbage");
+    const before = snapshot(root);
+    const r = cli([root, "--description=A.", "--yes"]);
+    assert.equal(r.status, 2, r.stdout + r.stderr);
+    assert.match(r.stderr, /git check-ignore failed/);
+    assert.deepEqual(snapshot(root), before);
+});
+
+test("init reports each out-of-date view once", () => {
+    const root = repo();
+    const result = scaffold(root, ANSWERS);
+    const decision = join(root, ".brain/decisions/process/2026-11-12-languages.md");
+    writeFileSync(decision, readFileSync(decision, "utf8").replace(/^# .*$/m, "# A new title"));
+    const log = mock.method(console, "log", () => {});
+    const error = mock.method(console, "error", () => {});
+    let code: number;
+    try {
+        code = report(root, result);
+    } finally {
+        log.mock.restore();
+        error.mock.restore();
+    }
+    const stale = log.mock.calls.map((c) => String(c.arguments[0])).filter((l) => l.startsWith("error V-VIEWS "));
+    const paths = stale.map((l) => l.split(" ")[2]);
+    assert.ok(paths.length > 0, "a view is out of date");
+    assert.deepEqual(paths, [...new Set(paths)], "each out-of-date view is reported once");
+    assert.equal(code, 1);
 });
 
 test("init accepts every real date and rejects one that does not exist", () => {
