@@ -60,3 +60,7 @@ The code of the tools has one style, checked by `npm run check` ([decision](../d
 2. The lint findings.
 3. The large modules split.
 4. The faults found in the review.
+
+## Log
+
+- 2026-11-20: Stage 1. Biome 2.6.8 is an exact devDependency with `biome.json` (four spaces, 120 characters, double quotes, semicolons, trailing commas, the `recommended` preset; `tools/**` and the JSON files at the root), `npm run format`, and `biome check` first in `npm run check`; the `Stop` hook of this repository also shows the lines of Biome diagnostics; [tooling-and-distribution.md](../architecture/tooling-and-distribution.md) and `README.md` name Biome among the checks. The code is reformatted in a separate commit with no other change. The recommended rules report only warnings and infos (78 and 21: mostly non-null assertions and string concatenation), left to stage 2. Checked: `npm run check` (Biome, types, `lint` and `index --check` on this brain, the conformance cases unchanged, 48 tests including the test of the package), and the output of `lint`, `index --check`, an unknown command, `init` with options, the `init` wizard through stdin and `init` with an invalid date, with the files written, identical to the character with the state before the step.
