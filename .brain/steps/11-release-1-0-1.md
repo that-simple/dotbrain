@@ -33,7 +33,7 @@ People who run `init` from npm get the fixes of steps 9 and 10: `@that-simple/do
 
 ## Decisions
 
-- [Releases of the npm package](../decisions/tooling/2026-11-20-package-releases.md) (`proposed`): a release is a step, tagged `v<version>`, published by the owner.
+- [Releases of the npm package](../decisions/tooling/2026-11-20-package-releases.md) (`accepted`): a release is a step, tagged `v<version>`, published by the owner.
 - [The specification version in semver](../decisions/model/2026-11-17-spec-version-in-semver.md): a release that only fixes the tools leaves the version of the specification.
 - [`README.md` commands without a version](../decisions/tooling/2026-11-20-readme-commands-without-version.md): `README.md` names the exact version only for the hook.
 - [Distribution channels](../decisions/tooling/2026-10-28-distribution-channels.md): the npm package carries the tools, the templates and the specification.
