@@ -209,7 +209,7 @@ test("a template that makes the skeleton invalid stops init before it writes any
 });
 
 test("init stops before writing anything when git ignores a file the tools must read", () => {
-    for (const ignore of ["CLAUDE.md", ".brain/"]) {
+    for (const ignore of ["CLAUDE.md", ".brain/", ".brain/decisions/README.md", ".github/instructions/", ".claude/"]) {
         const root = repo({ ".gitignore": `${ignore}\n` });
         const before = snapshot(root);
         const r = cli([root, "--description=A.", "--yes"]);
@@ -217,6 +217,13 @@ test("init stops before writing anything when git ignores a file the tools must 
         assert.ok(r.stderr.includes(`git ignores ${ignore.replace(/\/$/, "")}`), r.stderr);
         assert.deepEqual(snapshot(root), before, ignore);
     }
+    // An existing CLAUDE.md that git ignores is not seen by the tools, so it has no view, but init writes into it.
+    const root = repo({ ".gitignore": "CLAUDE.md\n", "CLAUDE.md": "# Notes API\n" });
+    const before = snapshot(root);
+    const r = cli([root, "--description=A.", "--yes"]);
+    assert.equal(r.status, 2, r.stdout + r.stderr);
+    assert.match(r.stderr, /git ignores CLAUDE\.md/);
+    assert.deepEqual(snapshot(root), before);
 });
 
 test("init stops before writing anything when git cannot tell which files it ignores", () => {
@@ -278,11 +285,11 @@ test("a change to a template changes what init writes, without a change to the c
     assert.match(readFileSync(join(root, "CLAUDE.md"), "utf8"), /always go in the same pull request/);
 });
 
-test("init warns when git ignores the directories of Claude Code", () => {
-    const root = repo({ ".gitignore": ".claude/\n" });
+test("init warns when git ignores the directory of the review subagent", () => {
+    const root = repo({ ".gitignore": ".claude/agents/\n" });
     const result = scaffold(root, ANSWERS);
-    assert.equal(result.warnings.length, 2);
-    assert.match(result.warnings[0]!, /git ignores \.claude\/rules\//);
+    assert.equal(result.warnings.length, 1);
+    assert.match(result.warnings[0]!, /git ignores \.claude\/agents\/.*the review subagent/);
 });
 
 test("init writes the Claude Code hook with the exact version of its package", () => {

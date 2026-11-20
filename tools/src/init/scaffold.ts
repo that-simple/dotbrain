@@ -103,16 +103,23 @@ export function scaffold(root: string, answers: Answers, templates = TEMPLATES_D
     for (const file of ROOT_INSTRUCTION_FILES) {
         if (!existsSync(join(root, file))) first.set(file, `# ${answers.name}\n`);
     }
-    // The tools do not read the files git ignores, so `index` would not see such a file once written.
-    const read = [...[...first.keys()].filter((p) => p.startsWith(".brain/")), ...ROOT_INSTRUCTION_FILES];
-    const ignoredFiles = ignoredByGit(root, read);
+    const planned = loadRepo(root, first);
+    const views = evaluateViews(planned, checkDocuments(planned).violations);
+    // The tools do not read the files git ignores, so neither `index` nor `lint` would see such a file once written:
+    // the documents of the brain and every view, the rule files among them. An existing root instruction file that
+    // git ignores has no view, because the tools do not see it, so the root instruction files are named as well.
+    const read = new Set([
+        ...[...first.keys()].filter((p) => p.startsWith(".brain/")),
+        ...ROOT_INSTRUCTION_FILES,
+        ...views.map((r) => r.view.path),
+    ]);
+    const ignoredFiles = ignoredByGit(root, [...read]);
     if (ignoredFiles.length) {
         throw new InitError(
             `git ignores ${ignoredFiles.join(", ")}; dotbrain does not read the files git ignores, so init would leave a brain without its views; change .gitignore`,
         );
     }
-    const planned = loadRepo(root, first);
-    const tainted = evaluateViews(planned, checkDocuments(planned).violations).filter((r) => r.status === "tainted");
+    const tainted = views.filter((r) => r.status === "tainted");
     if (tainted.length) {
         const reasons = tainted.map((r) => `the ${r.view.name} of ${r.view.path} (${r.reason})`);
         throw new InitError(`the templates give a skeleton whose views cannot be generated: ${reasons.join("; ")}`);
@@ -134,11 +141,11 @@ export function scaffold(root: string, answers: Answers, templates = TEMPLATES_D
         write(file, withPointer(readFileSync(join(root, file), "utf8"), pointer));
     }
 
-    const warnings = [".claude/rules/", ".claude/agents/"]
-        .filter((d) => ignored(root, `${d}x.md`))
-        .map(
-            (d) =>
-                `git ignores ${d}; commit it anyway (git add -f) or change .gitignore, so that the team gets ${d === ".claude/rules/" ? "the rules with a glob" : "the review subagent"}`,
-        );
+    // The tools do not read the review subagent, so an ignored `.claude/agents/` is a warning, not a stop.
+    const warnings = ignored(root, ".claude/agents/x.md")
+        ? [
+              "git ignores .claude/agents/; commit it anyway (git add -f) or change .gitignore, so that the team gets the review subagent",
+          ]
+        : [];
     return { written: [...written].sort(), warnings, notes: index.notes, prompt: setup.prompt };
 }
