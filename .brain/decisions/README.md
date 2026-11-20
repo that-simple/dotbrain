@@ -5,6 +5,10 @@ description: "Decisions: Proposed, Accepted, Rejected, Superseded"
 
 <!-- Generated from decision frontmatter. Do not edit by hand; regenerate on conflict. -->
 
+## Proposed
+
+- [Releases of the npm package](tooling/2026-11-20-package-releases.md): A release of the npm package is a step: it raises the version in `package.json` and in `README.md`, the release commit on `main` gets the tag `v<version>`, and the owner publishes it; `spec-v<version>` only when the specification changes.
+
 ## Accepted
 
 - [Agent contract](agents/2026-10-28-agent-contract.md): The core of the contract (the brain binds, decision before the work, open decisions are resolved by a person), extended with language, conflicts, content and work in a code repository. (2026-10-28)
