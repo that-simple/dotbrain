@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "input=$(cat); case \"$input\" in *'\"stop_hook_active\":true'*|*'\"stop_hook_active\": true'*) exit 0;; esac; cd \"$CLAUDE_PROJECT_DIR\" || exit 0; out=$(npm run check 2>&1) || { printf 'Repository checks failed (npm run check):\\n%s\\n' \"$(printf '%s\\n' \"$out\" | grep -E 'V-[A-Z]|error|✖|fail' | head -40)\" >&2; exit 2; }",
+            "command": "input=$(cat); case \"$input\" in *'\"stop_hook_active\":true'*|*'\"stop_hook_active\": true'*) exit 0;; esac; cd \"$CLAUDE_PROJECT_DIR\" || exit 0; out=$(npm run check 2>&1) || { printf 'Repository checks failed (npm run check):\\n%s\\n' \"$(printf '%s\\n' \"$out\" | grep -E 'V-[A-Z]|error|✖|fail|━━' | head -40)\" >&2; exit 2; }",
             "timeout": 120,
             "statusMessage": "Running repository checks"
           }

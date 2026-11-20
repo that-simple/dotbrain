@@ -67,6 +67,9 @@ description: "Decisions: Proposed, Accepted, Rejected, Superseded"
 - [The MVP is version 1.0, without phases after it](repository/2026-11-17-mvp-is-1-0.md): The MVP is version 1.0 of dotbrain, released as the 1.0.0 package; the roadmap has no phases after the MVP, and `new`, `export`, the context package, plugins and skills are outside 1.0, without a plan. (2026-11-17)
 - [No repository template on GitHub](tooling/2026-11-17-no-repository-template.md): dotbrain is published as the public repository `that-simple/dotbrain`, which documents the framework, without a repository template, and as the npm package `@that-simple/dotbrain` with the `dotbrain` command; no binary, plugins and skills outside 1.0. (2026-11-17)
 - [The specification version in semver, first published as 1.0.0](model/2026-11-17-spec-version-in-semver.md): The specification has a version in semver (`MAJOR.MINOR.PATCH`); the first published version is `1.0.0`, like the package, the versions may part later, and the specification describes the migration from the draft `0.1`. (2026-11-17)
+- [`init` stops when git ignores a file the tools read](tooling/2026-11-20-init-stops-on-ignored-files.md): `init` stops before writing anything when git ignores a file the tools read (the brain, the root instruction files, the views and the rule files among them); an ignored `.claude/agents/` stays a warning. (2026-11-20)
+- [`README.md` commands without a version](tooling/2026-11-20-readme-commands-without-version.md): The `npx` commands in `README.md` run the latest version of the package, without a version; the `Stop` hook keeps the exact version, which `README.md` names for a setup without `init`. (2026-11-20)
+- [Code style of the tools](repository/2026-11-20-tools-code-style.md): The code of the tools is formatted and linted by Biome, a pinned devDependency run in `npm run check`: four-space indentation, lines up to 120 characters, the recommended lint rules. (2026-11-20)
 
 ## Superseded
 

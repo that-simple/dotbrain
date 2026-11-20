@@ -1,0 +1,19 @@
+{
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+    "files": { "includes": ["tools/**", "*.json", "biome.jsonc"] },
+    "formatter": { "indentStyle": "space", "indentWidth": 4, "lineWidth": 120 },
+    "javascript": { "formatter": { "quoteStyle": "double", "semicolons": "always", "trailingCommas": "all" } },
+    "linter": {
+        "rules": {
+            "preset": "recommended",
+            "style": {
+                // With `noUncheckedIndexedAccess`, an indexed access or a regex group is typed as possibly
+                // undefined even right after a length check or a match; `!` marks such places, where the code
+                // has already established the value is there.
+                "noNonNullAssertion": "off"
+            }
+        }
+    },
+    "assist": { "enabled": false }
+}

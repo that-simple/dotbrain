@@ -55,7 +55,7 @@ A brain is set up in one of two ways:
 - **With the `init` wizard:** requires Node 24 or newer. It runs from the npm package:
 
   ```sh
-  npx --yes @that-simple/dotbrain@1.0.0 init path/to/your-repo
+  npx --yes @that-simple/dotbrain init path/to/your-repo
   ```
 
   `init` asks questions in turn: the name of the brain, the language, the owner, a description of the project, the languages of the work, the order of work and whether steps are named by the keys of tickets. Then it builds the skeleton of the brain and leaves a `DOTBRAIN-SETUP.md` file with an instruction for the agent. The agent finishes the setup according to it (translation, code scan, architecture draft) and deletes this file.
@@ -65,17 +65,17 @@ A brain is set up in one of two ways:
 The `dotbrain` CLI comes in the npm package `@that-simple/dotbrain` and requires Node 24 or newer; it has no runtime dependencies. Its source is in [`tools/`](tools/).
 
 ```sh
-npx --yes @that-simple/dotbrain@1.0.0 init [<repo>]            # wizard of the skeleton of a brain; overwrites nothing
-npx --yes @that-simple/dotbrain@1.0.0 lint [<repo>]            # validity rules; exit code 1 on an error
-npx --yes @that-simple/dotbrain@1.0.0 index [<repo>]           # generates the views: the decision list, the index, the status lines of steps, the managed blocks, the rule files
-npx --yes @that-simple/dotbrain@1.0.0 index [<repo>] --check   # only reports stale views
+npx --yes @that-simple/dotbrain init [<repo>]            # wizard of the skeleton of a brain; overwrites nothing
+npx --yes @that-simple/dotbrain lint [<repo>]            # validity rules; exit code 1 on an error
+npx --yes @that-simple/dotbrain index [<repo>]           # generates the views: the decision list, the index, the status lines of steps, the managed blocks, the rule files
+npx --yes @that-simple/dotbrain index [<repo>] --check   # only reports stale views
 ```
 
 `init` also takes the answers without questions, in options or in a JSON file. The `--yes` option takes the default values for questions without an answer:
 
 ```sh
-npx --yes @that-simple/dotbrain@1.0.0 init ../my-repo --answers answers.json
-npx --yes @that-simple/dotbrain@1.0.0 init ../my-repo --lang=en --description="One sentence about the project." --step-ids=yes --yes
+npx --yes @that-simple/dotbrain init ../my-repo --answers answers.json
+npx --yes @that-simple/dotbrain init ../my-repo --lang=en --description="One sentence about the project." --step-ids=yes --yes
 ```
 
 Answer keys:
@@ -98,10 +98,10 @@ Answer keys:
 
 A change starts in the brain. A decision goes to `.brain/decisions/`, and larger work to a step in `.brain/steps/`. Changes to the brain go in the same PR as the work that follows from them. Agents get the rules from the managed block in [`CLAUDE.md`](CLAUDE.md), and the rules of work on the brain from [`.claude/rules/dotbrain.md`](.claude/rules/dotbrain.md).
 
-The repository's checks cover types, `lint` and `index --check` on this brain, the freshness of the conformance cases and the tests, including the test of the npm package:
+The repository's checks cover the format and the lint rules of [Biome](https://biomejs.dev) on the code of the tools (`npm run format` formats it), types, `lint` and `index --check` on this brain, the freshness of the conformance cases and the tests, including the test of the npm package:
 
 ```sh
-npm install      # once: TypeScript for type checking
+npm install      # once: Biome and TypeScript for the checks
 npm run check
 ```
 
