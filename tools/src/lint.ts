@@ -11,7 +11,8 @@ import {
     type Repo,
 } from "./repo.ts";
 import { applyValue, effectiveRules, wordCount, ruleText } from "./rules.ts";
-import { allViews, TAINTING_RULES, type View } from "./views.ts";
+import { allViews, TAINTING_RULES } from "./views/all-views.ts";
+import type { View } from "./views/view.ts";
 
 export type Severity = "error" | "warning";
 

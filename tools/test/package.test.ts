@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { after, before, test } from "node:test";
 import { fileURLToPath } from "node:url";
-import type { Answers } from "../src/init.ts";
+import type { Answers } from "../src/init/questions.ts";
 import { removeTempDirs, repo, runHook, snapshot, tempDir } from "./helpers.ts";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
@@ -74,7 +74,7 @@ test("the tarball holds only the built tools, the templates, the specification a
     );
     for (const p of [
         "dist/dotbrain.js",
-        "dist/src/init.js",
+        "dist/src/init/cli.js",
         "templates/index.md",
         "spec/README.md",
         "LICENSE",

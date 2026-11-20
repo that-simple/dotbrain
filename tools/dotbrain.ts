@@ -5,7 +5,7 @@
 import { resolve } from "node:path";
 import { lint, severity } from "./src/lint.ts";
 import { runIndex } from "./src/index.ts";
-import { runInit } from "./src/init.ts";
+import { runInit } from "./src/init/cli.ts";
 import { loadRepo } from "./src/repo.ts";
 
 const USAGE = `Usage:

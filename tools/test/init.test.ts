@@ -6,16 +6,9 @@ import { join } from "node:path";
 import { afterEach, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { runIndex } from "../src/index.ts";
-import {
-    CLAUDE_SETTINGS,
-    InitError,
-    PACKAGE_VERSION,
-    QUESTIONS,
-    scaffold,
-    SETUP_FILE,
-    TEMPLATES_DIR,
-    type Answers,
-} from "../src/init.ts";
+import { type Answers, InitError, QUESTIONS } from "../src/init/questions.ts";
+import { scaffold } from "../src/init/scaffold.ts";
+import { CLAUDE_SETTINGS, PACKAGE_VERSION, SETUP_FILE, TEMPLATES_DIR } from "../src/init/skeleton.ts";
 import { lint, severity } from "../src/lint.ts";
 import { loadRepo } from "../src/repo.ts";
 import { removeTempDirs, repo, snapshot, tempDir } from "./helpers.ts";
