@@ -1,12 +1,12 @@
 ---
-status: draft
+status: agreed
 assignee: [user:dkowcun]
 description: "The code of the tools has one checked style (Biome, four spaces), modules with one responsibility each, and the faults found in a review fixed, with the behavior of the CLI unchanged."
 ---
 # Step 9: code quality of the tools
 
 <!-- BEGIN:dotbrain status -->
-Status: `draft` · Assignee: user:dkowcun
+Status: `agreed` · Assignee: user:dkowcun
 <!-- END:dotbrain status -->
 
 The owner asked for a review and a cleanup of the code of the CLI, with Biome and four-space indentation, the large modules split, and DRY only where it is needed (conversation with the agent, 2026-11-20). Three modules hold most of the code: `tools/src/init.ts` (526 lines), `tools/src/views.ts` (465) and `tools/conformance/build-cases.ts` (849).
