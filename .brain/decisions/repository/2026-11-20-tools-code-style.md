@@ -15,7 +15,7 @@ The tools have no runtime dependencies ([tooling-and-distribution.md](../../arch
 
 ## Options
 
-- **Biome**: one devDependency that formats and lints TypeScript and JSON, configured in one `biome.json`, without plugins.
+- **Biome**: one devDependency that formats and lints TypeScript and JSON, configured in one file, without plugins.
 - **Prettier and ESLint**: two tools, ESLint with the TypeScript parser and plugins, and their configurations kept in step.
 - **No tool**: the style stays kept by hand.
 
@@ -25,7 +25,7 @@ Biome, as a devDependency pinned to an exact version (`@biomejs/biome` 2.6.8), w
 
 - Indentation with four spaces; lines up to 120 characters; double quotes, semicolons and trailing commas, as today.
 - The scope is `tools/**` and the JSON files at the root of the repository. `templates/`, `spec/`, `.brain/` and `dist/` are outside it: templates and the specification are text of the framework read by people and other implementations, not code of the tools.
-- A lint rule turned off in `biome.json` has its reason written next to it.
+- The configuration is `biome.jsonc`, because Biome accepts comments only there; a lint rule turned off in it has its reason written next to it, in a comment.
 
 ## Consequences
 
