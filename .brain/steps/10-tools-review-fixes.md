@@ -1,11 +1,11 @@
 ---
-status: draft
+status: agreed
 description: "`init` stops before writing anything when git ignores a file `index` must read, accepts every real date, and reports each out-of-date view once; a test covers each fix."
 ---
 # Step 10: fixes from the review of step 9
 
 <!-- BEGIN:dotbrain status -->
-Status: `draft`
+Status: `agreed`
 <!-- END:dotbrain status -->
 
 A code review of the branch of [step 9](09-tools-code-quality.md), after the step was done, found faults in `init` and `lint`; step 9 records them in its log, and the owner asked for them to be fixed (conversation with the agent, 2026-11-20).
