@@ -41,7 +41,7 @@ The code of the tools has one style, checked by `npm run check` ([decision](../d
 
 ## Decisions
 
-- [Code style of the tools](../decisions/repository/2026-11-20-tools-code-style.md) (`proposed`): Biome, four spaces, 120 characters, the recommended rules.
+- [Code style of the tools](../decisions/repository/2026-11-20-tools-code-style.md) (`accepted`): Biome, four spaces, 120 characters, the recommended rules.
 - [Technology of the tools](../decisions/tooling/2026-10-28-tooling-technology.md): TypeScript run directly by Node, syntax that can be stripped, types checked by `tsc`.
 - [The simplest thing that works](../decisions/model/2026-10-28-simplest-thing-that-works.md): no more structure than the code needs.
 - [The brain in the same PR as the work](../decisions/repository/2026-11-03-brain-in-the-same-pr.md): the step set to `agreed` before the work, each stage a separate commit.
@@ -60,7 +60,3 @@ The code of the tools has one style, checked by `npm run check` ([decision](../d
 2. The lint findings.
 3. The large modules split.
 4. The faults found in the review.
-
-## Open questions
-
-- The step can be agreed only after the [decision on the code style](../decisions/repository/2026-11-20-tools-code-style.md) is accepted.

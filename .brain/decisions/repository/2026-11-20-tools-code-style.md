@@ -1,10 +1,11 @@
 ---
-status: proposed
+status: accepted
+decided: 2026-11-20
 description: "The code of the tools is formatted and linted by Biome, a pinned devDependency run in `npm run check`: four-space indentation, lines up to 120 characters, the recommended lint rules."
 ---
 # Code style of the tools
 
-Source: conversation with the agent, 2026-11-20. The owner asked for Biome and for four-space indentation instead of two, and chose the line width, the scope of the check and the status of this decision in the same conversation.
+Source: conversation with the agent, 2026-11-20. The owner asked for Biome and for four-space indentation instead of two, and chose the line width and the scope of the check in the same conversation, and accepted this decision there.
 
 ## Context
 
@@ -18,7 +19,7 @@ The tools have no runtime dependencies ([tooling-and-distribution.md](../../arch
 - **Prettier and ESLint**: two tools, ESLint with the TypeScript parser and plugins, and their configurations kept in step.
 - **No tool**: the style stays kept by hand.
 
-## Recommendation
+## Decision
 
 Biome, as a devDependency pinned to an exact version (`@biomejs/biome` 2.6.8), with `biome check` (the formatter and the linter with the `recommended` rules) in `npm run check`, so the checks of this repository and its `Stop` hook enforce it.
 
@@ -26,6 +27,10 @@ Biome, as a devDependency pinned to an exact version (`@biomejs/biome` 2.6.8), w
 - The scope is `tools/**` and the JSON files at the root of the repository. `templates/`, `spec/`, `.brain/` and `dist/` are outside it: templates and the specification are text of the framework read by people and other implementations, not code of the tools.
 - A lint rule turned off in `biome.json` has its reason written next to it.
 
+## Consequences
+
+[Step 9](../../steps/09-tools-code-quality.md) adds Biome, reformats the code and fixes the lint findings. Every later change of `tools/` passes `biome check` as part of `npm run check`.
+
 ## Who decides and when
 
-The owner of the project (dkowcun), before [step 9](../../steps/09-tools-code-quality.md) is agreed.
+The owner of the project (dkowcun), 2026-11-20.
