@@ -1,39 +1,41 @@
 {
-  "name": "@that-simple/dotbrain",
-  "version": "1.0.0",
-  "type": "module",
-  "description": "An open framework for working with AI agents in a code repository: lint, index and init for its brain.",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/that-simple/dotbrain.git"
-  },
-  "engines": {
-    "node": ">=24"
-  },
-  "bin": {
-    "dotbrain": "dist/dotbrain.js"
-  },
-  "files": [
-    "dist/",
-    "templates/",
-    "spec/"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "scripts": {
-    "lint": "node tools/dotbrain.ts lint",
-    "index": "node tools/dotbrain.ts index",
-    "test": "node --test 'tools/test/*.test.ts'",
-    "typecheck": "tsc",
-    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
-    "prepack": "npm run build",
-    "check": "tsc && node tools/dotbrain.ts lint && node tools/dotbrain.ts index --check && node tools/conformance/build-cases.ts --check && node --test 'tools/test/*.test.ts'",
-    "build-cases": "node tools/conformance/build-cases.ts"
-  },
-  "devDependencies": {
-    "@types/node": "^24.19.2",
-    "typescript": "^5.9.3"
-  }
+    "name": "@that-simple/dotbrain",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "An open framework for working with AI agents in a code repository: lint, index and init for its brain.",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/that-simple/dotbrain.git"
+    },
+    "engines": {
+        "node": ">=24"
+    },
+    "bin": {
+        "dotbrain": "dist/dotbrain.js"
+    },
+    "files": [
+        "dist/",
+        "templates/",
+        "spec/"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "lint": "node tools/dotbrain.ts lint",
+        "index": "node tools/dotbrain.ts index",
+        "test": "node --test 'tools/test/*.test.ts'",
+        "typecheck": "tsc",
+        "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p tsconfig.build.json",
+        "prepack": "npm run build",
+        "format": "biome format --write",
+        "check": "biome check && tsc && node tools/dotbrain.ts lint && node tools/dotbrain.ts index --check && node tools/conformance/build-cases.ts --check && node --test 'tools/test/*.test.ts'",
+        "build-cases": "node tools/conformance/build-cases.ts"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.6.8",
+        "@types/node": "^24.19.2",
+        "typescript": "^5.9.3"
+    }
 }

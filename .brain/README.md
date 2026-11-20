@@ -44,7 +44,7 @@ The list of documents is generated from their `description` ([decision](decision
 - [06-lint-hook.md](steps/06-lint-hook.md): The agent runs `dotbrain lint` after every piece of work that changes the brain: in Claude Code through a hook from the starter template, in other tools according to a contract rule, when the CLI is available. (`done`)
 - [07-lighter-entry.md](steps/07-lighter-entry.md): A lighter entry to dotbrain: the agent gets only the core of the contract in every task and the rules of work on the brain when it works on the brain, the contract has one normative text, and the framework is run through an agent with a person in the loop: the person reads steps, decisions and risks, the agent finds the rest and keeps the generated views. (`done`)
 - [08-publication.md](steps/08-publication.md): dotbrain 1.0 is public: the `that-simple/dotbrain` repository on GitHub with a squashed history and the tag `spec-v1.0.0`, and the package `@that-simple/dotbrain@1.0.0` on npm, with managed blocks linking to the published specification. (`done`)
-- [09-tools-code-quality.md](steps/09-tools-code-quality.md): The code of the tools has one checked style (Biome, four spaces), modules with one responsibility each, and the faults found in a review fixed, with the behavior of the CLI unchanged. (`agreed`)
+- [09-tools-code-quality.md](steps/09-tools-code-quality.md): The code of the tools has one checked style (Biome, four spaces), modules with one responsibility each, and the faults found in a review fixed, with the behavior of the CLI unchanged. (`in-progress`)
 <!-- END:dotbrain index -->
 
 ## Steps

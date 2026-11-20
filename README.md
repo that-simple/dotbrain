@@ -98,10 +98,10 @@ Answer keys:
 
 A change starts in the brain. A decision goes to `.brain/decisions/`, and larger work to a step in `.brain/steps/`. Changes to the brain go in the same PR as the work that follows from them. Agents get the rules from the managed block in [`CLAUDE.md`](CLAUDE.md), and the rules of work on the brain from [`.claude/rules/dotbrain.md`](.claude/rules/dotbrain.md).
 
-The repository's checks cover types, `lint` and `index --check` on this brain, the freshness of the conformance cases and the tests, including the test of the npm package:
+The repository's checks cover the format and the lint rules of [Biome](https://biomejs.dev) on the code of the tools (`npm run format` formats it), types, `lint` and `index --check` on this brain, the freshness of the conformance cases and the tests, including the test of the npm package:
 
 ```sh
-npm install      # once: TypeScript for type checking
+npm install      # once: Biome and TypeScript for the checks
 npm run check
 ```
 
