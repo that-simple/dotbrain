@@ -1,11 +1,11 @@
 ---
-status: draft
+status: agreed
 description: "`@that-simple/dotbrain@1.0.1` is on npm with the fixes of steps 9 and 10, tagged `v1.0.1` on `main`; the specification stays at 1.0.0."
 ---
 # Step 11: release 1.0.1
 
 <!-- BEGIN:dotbrain status -->
-Status: `draft`
+Status: `agreed`
 <!-- END:dotbrain status -->
 
 Steps [9](09-tools-code-quality.md) and [10](10-tools-review-fixes.md) changed `init` and the starter procedure without changing the specification, and are on `main`; the published package `1.0.0` does not have them (conversation of the owner with the agent, 2026-11-20).
