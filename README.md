@@ -4,7 +4,7 @@ An open framework for working with AI agents in a code repository.
 
 Its core is the project's **brain**, a `.brain/` directory: the single source of truth for agents and people. Decisions are made in it before the work, knowledge about the project lives in it, and the work is planned in it as steps a person agrees. Agents and people work with it by one contract, and changes to the brain go through review together with the code.
 
-> **Status:** dotbrain 1.0: the specification 1.0.0 (tag `spec-v1.0.0`) and the npm package `@that-simple/dotbrain@1.0.0`. Details in the [Status](#status) section.
+> **Status:** dotbrain 1.0: the specification 1.0.0 (tag `spec-v1.0.0`) and the npm package `@that-simple/dotbrain@1.0.1`. Details in the [Status](#status) section.
 
 ## How it works
 
@@ -108,18 +108,18 @@ npm run check
 In this repository the tools run from the `.ts` files, without building: `node tools/dotbrain.ts <subcommand>`, or `npm run lint` and `npm run index`. The npm package `@that-simple/dotbrain` is built only when it is packed: `npm pack` compiles `tools/dotbrain.ts` and `tools/src/` to `dist/` with [`tsconfig.build.json`](tsconfig.build.json) (`dist/` is not in git) and writes a tarball with `dist/`, `templates/`, `spec/`, `LICENSE`, `README.md` and `package.json`:
 
 ```sh
-npm pack         # builds dist/ and writes that-simple-dotbrain-1.0.0.tgz
+npm pack         # builds dist/ and writes that-simple-dotbrain-1.0.1.tgz
 ```
 
 The test of the package ([`tools/test/package.test.ts`](tools/test/package.test.ts)) packs it, installs it from the tarball into a temporary directory and checks that `init`, `lint` and `index` from it work the same as from this repository.
 
-In Claude Code the checks are run by the `Stop` hook from [`.claude/settings.json`](.claude/settings.json). A brain set up with the starter template gets its own `Stop` hook ([`templates/claude-settings.json`](templates/claude-settings.json)), which runs `npx --yes @that-simple/dotbrain@1.0.0 lint` when the brain has changed; `1.0.0` is the version of the package to write into it when the brain is set up without `init`. The [`brain-review`](.claude/agents/brain-review.md) subagent reviews a change against the brain before a step is closed, before a branch is merged into `main` and before a commit directly to `main`.
+In Claude Code the checks are run by the `Stop` hook from [`.claude/settings.json`](.claude/settings.json). A brain set up with the starter template gets its own `Stop` hook ([`templates/claude-settings.json`](templates/claude-settings.json)), which runs `npx --yes @that-simple/dotbrain@1.0.1 lint` when the brain has changed; `1.0.1` is the version of the package to write into it when the brain is set up without `init`. The [`brain-review`](.claude/agents/brain-review.md) subagent reviews a change against the brain before a step is closed, before a branch is merged into `main` and before a commit directly to `main`.
 
 The conformance cases are built by [`tools/conformance/build-cases.ts`](tools/conformance/build-cases.ts). After changing a case, or a change of the specification that changes the views, the suite is built again (`npm run build-cases`) and the differences are reviewed. The suite itself does not depend on the script: every implementation is checked against the files in `spec/conformance/`.
 
 ## Status
 
-dotbrain 1.0 is the MVP ([roadmap](.brain/roadmap.md)): the core specification, the agent contract with adapters, the rules for parallel work, the starter template, `init`, `lint` and `index`, and `dotbrain lint` run by the agent. The specification 1.0.0 is at the tag `spec-v1.0.0` of this repository, and the tools in the npm package `@that-simple/dotbrain@1.0.0`. This repository is not a template: it documents the framework, and a brain is set up with the starter procedure or `init` ([decision](.brain/decisions/tooling/2026-11-17-no-repository-template.md)).
+dotbrain 1.0 is the MVP ([roadmap](.brain/roadmap.md)): the core specification, the agent contract with adapters, the rules for parallel work, the starter template, `init`, `lint` and `index`, and `dotbrain lint` run by the agent. The specification 1.0.0 is at the tag `spec-v1.0.0` of this repository, and the tools in the npm package `@that-simple/dotbrain@1.0.1`. This repository is not a template: it documents the framework, and a brain is set up with the starter procedure or `init` ([decision](.brain/decisions/tooling/2026-11-17-no-repository-template.md)).
 
 The Simplicity gate has passed: a pilot in a project outside dotbrain keeps a brain in Polish, a language other than this brain, which is in English. So far the framework has been checked live only with Claude Code.
 

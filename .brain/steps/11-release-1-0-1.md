@@ -1,11 +1,12 @@
 ---
-status: agreed
+status: in-progress
+assignee: [user:dkowcun]
 description: "`@that-simple/dotbrain@1.0.1` is on npm with the fixes of steps 9 and 10, tagged `v1.0.1` on `main`; the specification stays at 1.0.0."
 ---
 # Step 11: release 1.0.1
 
 <!-- BEGIN:dotbrain status -->
-Status: `agreed`
+Status: `in-progress` · Assignee: user:dkowcun
 <!-- END:dotbrain status -->
 
 Steps [9](09-tools-code-quality.md) and [10](10-tools-review-fixes.md) changed `init` and the starter procedure without changing the specification, and are on `main`; the published package `1.0.0` does not have them (conversation of the owner with the agent, 2026-11-20).
@@ -48,3 +49,7 @@ People who run `init` from npm get the fixes of steps 9 and 10: `@that-simple/do
 
 1. Ready for release: the version, `README.md` and the brain, in a pull request.
 2. The publication after the merge: the tag, `npm publish`, the check from the registry, and `done`.
+
+## Log
+
+- 2026-11-21: Stage 1, ready for release. `package.json` and `package-lock.json` have the version `1.0.1`; `README.md` names the package `1.0.1` in its status, the tarball `that-simple-dotbrain-1.0.1.tgz`, and `1.0.1` as the version of the hook of a setup without `init`. [tooling-and-distribution.md](../architecture/tooling-and-distribution.md) names the current version `1.0.1` with the specification `1.0.0` and describes the way of releasing by the [decision on releases](../decisions/tooling/2026-11-20-package-releases.md); [roadmap.md](../roadmap.md) names this step. The version of the specification is separate from the version of the package in the tools (`SPEC_VERSION` in `tools/src/lint.ts`, the version of the hook from `package.json`), so nothing else changes. Checked: `npm run check` (53 tests including the test of the package, the conformance cases unchanged), and the tarball from `npm pack` installed into a temporary directory: `init` in an empty repository writes `@that-simple/dotbrain@1.0.1 lint` into `.claude/settings.json`, `spec: 1.0.0` into `.brain/README.md` and managed blocks `BEGIN:dotbrain 1.0.0`, with `lint` and `index --check` passing; `init` in a repository whose `.gitignore` lists `.claude/` exits with code 2 and writes nothing.
